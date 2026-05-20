@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React from 'react'
 import { useState } from 'react'
+import { AuthCard } from '../components/AuthCard';
 
 export default function Login() {
   const [formData, setformData] = useState({
@@ -25,14 +26,17 @@ const handleSubmit= async(e)=>{
   }
 }
   return (
+    <AuthCard>
+
     <div>
-      <h1>Welcome Back </h1>
-      <h3>Login</h3>
-   <form onSubmit={handleSubmit}>
-    <input type="email" name="email" id="email" placeholder='Enter Your email' value={formData.email} onChange={handleChange} />
-    <input type="password" name="password" id="password" placeholder='Enter Your password' value={formData.password} onChange={handleChange} />
-    <button type='submit'>Login</button>
+      <h1 className='text-2xl text-center  font-bold mb-4'>Welcome Back </h1>
+      <h3 className='text-lg text-center font-semibold mb-4'>Login</h3>
+   <form className='flex flex-col items-center justify-center' onSubmit={handleSubmit}>
+    <input className='border w-full p-3 rounded-lg mb-4 ' type="email" name="email" id="email" placeholder='Enter Your email' value={formData.email} onChange={handleChange} />
+    <input className='border w-full p-3 rounded-lg mb-4 ' type="password" name="password" id="password" placeholder='Enter Your password' value={formData.password} onChange={handleChange} />
+    <button className='bg-blue-500 text-white py-2 px-4 w-full cursor-pointer rounded-lg hover:bg-blue-600' type='submit'>Login</button>
    </form>
     </div>
+    </AuthCard>
   )
 }

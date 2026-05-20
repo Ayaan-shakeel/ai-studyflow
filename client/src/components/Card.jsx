@@ -1,9 +1,9 @@
-import { motion } from "framer-motion";
-import { Children } from "react";
-export const AuthCard=({children})=>{
-return(
-    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-200 to-purple-200">
-        <motion.div
+import React from 'react'
+import { motion } from 'framer-motion'
+export default function Card({children}) {
+  return (
+    <div className='flex items-center justify-center min-h-screen bg-linear-to-r from-purple-400 via-pink-500 to-red-500'>
+ <motion.div
             initial={{opacity:0,scale:0.9}}
             animate={{opacity:1,scale:1}}
             transition={{duration:0.5}}
@@ -12,7 +12,6 @@ return(
             {children}
         </motion.div>
 
-        
     </div>
-)
+  )
 }
