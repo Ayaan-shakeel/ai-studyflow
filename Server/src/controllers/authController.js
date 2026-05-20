@@ -66,3 +66,13 @@ export const loginUser = async (req, res) => {
             res.status(500).json({ status: 0, message: error.message });
         }
     }
+  export const getProfile=async (req,res)=>{
+    try{
+      res.status(201).json({success:true,message:"Profile fetched Successfully",user:req.user})
+    }
+    catch(error){
+        console.log(error);
+        res.status(500).json({status:0,message:error.message})
+    }
+
+  }
