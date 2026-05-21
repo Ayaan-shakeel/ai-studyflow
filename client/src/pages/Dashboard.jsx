@@ -19,10 +19,10 @@ export default function Dashboard() {
           withCredentials:true
         })
         setuser(res.data.user)  
-        console.log(user.id)
+        console.log(res.data.user?.id)
       }catch(error){
         console.log(error.message)
-        // navigate("/login")
+        navigate("/login")
       }
     }
     fetchProfile();
@@ -40,7 +40,8 @@ export default function Dashboard() {
       <h1 className='text-2xl text-center font-bold mb-4'>Welcome to Dashboard </h1>
       <Card>
         <h1>Dashboard Content</h1>
-     <h2>{user?.id}</h2>
+     <h2>{user?.username}</h2>
+     <h3>{user?.email}</h3>
       </Card>
 <Logout/>
 

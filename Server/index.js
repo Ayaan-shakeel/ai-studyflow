@@ -6,6 +6,7 @@ import jsonwebtoken from "jsonwebtoken";
 import bcrypt from "bcryptjs"
 import connectDB from "./src/config/db.js";
 import { router } from "./src/routes/authRoutes.js";
+import { notesRouter } from "./src/routes/NotesRoutes.js";
 
 const app=express();
 app.use(express.json());
@@ -22,7 +23,7 @@ app.get("/",(req,res)=>{
     
 });
 app.use("/api/auth",router)
-
+app.use("/api/notes",notesRouter)
 connectDB();
 app.listen(process.env.PORT || 5000,()=>{
     console.log(`Server is running on port ${process.env.PORT}`)
