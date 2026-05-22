@@ -8,7 +8,7 @@ export default function Sidebar() {
     const [desktopOpen, setDesktopOpen] = useState(false)
 
   return (
-    <div className={`bg-gray-700 ${desktopOpen ? 'w-64' : 'w-20'} text-white transition-all duration-300 h-screen p-5 pt-8 relative mb-5`}>
+    <div className={`bg-gray-700 ${desktopOpen ? 'w-64' : 'w-20'} text-white transition-all duration-300 h-screen p-5 pt-8 relative mb-5 min-h-screen`}>
         <div>
 
        <button className='mb-5' onClick={()=>{setDesktopOpen(!desktopOpen

@@ -7,6 +7,7 @@ import bcrypt from "bcryptjs"
 import connectDB from "./src/config/db.js";
 import { router } from "./src/routes/authRoutes.js";
 import { notesRouter } from "./src/routes/NotesRoutes.js";
+import { subjectRouter } from "./src/routes/SubjectRoutes.js";
 
 const app=express();
 app.use(express.json());
@@ -24,6 +25,7 @@ app.get("/",(req,res)=>{
 });
 app.use("/api/auth",router)
 app.use("/api/notes",notesRouter)
+app.use("/api/subjects",subjectRouter)
 connectDB();
 app.listen(process.env.PORT || 5000,()=>{
     console.log(`Server is running on port ${process.env.PORT}`)
