@@ -4,7 +4,7 @@ import Navbar from '../components/Navbar'
 import axios from 'axios';
 import Card from '../components/Card';
 
-export default function Subjects() {
+export default function Subjects({user}) {
   const [subject, setsubject] = useState([]);
   const [formData, setformData] = useState({
     name:""
@@ -57,7 +57,7 @@ try{
     <div className='flex'>
       <Sidebar/>
       <div className='flex-1'>
-        <Navbar/>
+        <Navbar user={user}/>
       
       <h1 className='font-bold lg:text-3xl md:text-2xl sm:text-2xl text-center '>Subjects</h1>
       <form onSubmit={handleSubmit}>

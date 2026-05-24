@@ -13,6 +13,11 @@ const NotesSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    subjectId:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Subject',
+        required:true,
+    },
 
 },
     {

@@ -47,3 +47,20 @@ export const deleteSubject=async(req,res)=>{
     }
 
 }
+export const updateSubject=async(req,res)=>{
+    try{
+const {name}=req.body;
+const updateSubject=await Subject.findById(req.params.id);
+if(!updateSubject){
+    return res.status(404).json({status:0,message:"Subjectt not found"})
+};
+if(!updateSubject.userId.toString()!==req.user.id.toString()){
+    return res.status(401).json({status:0,message:"You are not authorized to update this subject"})
+}
+updateSubject.name=name || updateSubject.name
+await updateSubject.save();
+    }catch(error){
+        console.log(error);
+        res.status(500).json({status:0,message:error.message});
+    }
+}
