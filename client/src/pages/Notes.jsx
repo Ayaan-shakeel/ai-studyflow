@@ -16,6 +16,9 @@ export default function Notes({children}) {
     subjectId:""
   });
   const [subjects, setSubjects] = useState([])
+  const [search, setSearch] = useState('');
+  const [subjectFilter,setSubjectFilter] = useState("all")
+
 
 
   useEffect(()=>{
@@ -89,12 +92,18 @@ export default function Notes({children}) {
         console.log(error)
     }
   }
+  const filteredNotes=notes.filter((note)=>{
+    const matchesSearch= note.title.toLowerCase().includes(search.toLowerCase());
+    const matchesSubject=subjectFilter==="all" || note.subjectId?._id ===subjectFilter;
+   
+    return matchesSearch && matchesSubject
+  })
   return (
-    <div>
+    <div className='bg-linear-to-br from-slate-950 via-indigo-950 to-slate-900'>
        {/* <div className='flex'>
-            <Sidebar/>
+            <Sidebar/> */}
             <div className='flex-1'>
-             <Navbar user={user}/> */}
+             <Navbar user={user}/>
 
 
     <NotesCard>
@@ -121,17 +130,41 @@ export default function Notes({children}) {
   </select>
 </div>
 
-<div>
-    <button className='bg-blue-500 hover:bg-blue-600 transition-all duration-300 text-white rounded-xl p-4 font-semibold ' type='submit'>Add Note</button>
+<div className="w-full">
+    <button className='bg-blue-500 hover:bg-blue-600 transition-all duration-300 text-white w-full rounded-xl p-4 font-semibold ' type='submit'>Add Note</button>
   </div>
  </form>
 </div>
     </NotesCard>
-{notes.map((note)=>(
+    <div>
+<div className='flex flex-col items-center gap-10 justify-center mb-5'>
+  <input className=' w-[90%] lg:w-[40%] md:w-[60%] p-3 bg-white text-black rounded-xl outline-none ' type="search" placeholder='Search Notes . . . .' name="search" id="search" value={search} onChange={(e)=>setSearch(e.target.value)} />
+ <div>
+  <select  className='bg-white text-black  rounded-2xl py-4 px-18 mb-5 text-wrap' name="subjectId" id="subjectId" value={subjectFilter} onChange={(e)=>setSubjectFilter(e.target.value)}>
+    <option value="">All Subject</option>
+    {subjects.map((subject)=>(
+      <option key={subject._id} value={subject._id}>{subject.name}</option>
+
+    ))}
+  </select>
+</div>
+  </div>
+<div>
+
+      {notes.length === 0 ? (<h1 className='font-bold text-white text-center text-3xl mt-5 mb-5 '>No Notes Yet</h1>
+    ) :(
+      <>
+
+      <div>
+        <h1 className='text-lime-300 underline font-bold text-center text-3xl mt-5 mb-5'>Your Notes</h1>
+      </div>
+      <div className='grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-4 mt-5 text-center'>
+
+{filteredNotes.map((note)=>(
   <div key={note._id}>
    
 
- <div className='bg-gray-500'>
+ <div className=''>
     <Card note={note} className='mt-4 flex justify-center'>
       <div className='flex gap-2'>
         <BookOpen/>
@@ -148,7 +181,12 @@ export default function Notes({children}) {
    </div>
 ))}
     </div>
+    </> 
+  )}
+  </div>
+    </div>
       
+      </div>
     // </div>
             
     // </div>

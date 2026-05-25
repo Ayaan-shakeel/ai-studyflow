@@ -17,6 +17,8 @@ export default function Task({user}) {
         isDone:false
 
     })
+    const [search, setSearch] = useState('');
+    const [filter,setFilter]=useState('all')
     useEffect(()=>{
       const fetchTasks=async()=>{
         try{
@@ -74,6 +76,22 @@ const deleteTask=async(id)=>{
   console.log(error)
 }
 }
+const filteredTasks=task.filter((task)=>{
+  const matchesSearch= task.title.toLowerCase().includes(search.toLowerCase());
+  if(filter==='completed'){
+    return matchesSearch && task.isDone
+    
+  };
+  if(filter==='pending'){
+    return matchesSearch && !task.isDone
+     
+  };
+  if(filter==='priority'){
+    return matchesSearch && task.isPriority
+     
+  };
+  return matchesSearch;
+})
   return (
     <div className=' min-h-screen bg-linear-to-br from-blue-950 via-slate-900 to-gray-800'>
       <div>
@@ -100,13 +118,22 @@ const deleteTask=async(id)=>{
         </div>
         </form>
         </TaskCard>
+        <div className='flex justify-center mb-5'>
+          <input className='w-[90%] md:w-[60%] lg:w-[40%] rounded-xl bg-white text-black outline-none p-3' type="search" placeholder='Search Tasks ....' name="search" id="search" value={search} onChange={(e)=>setSearch(e.target.value)} />
+        </div>
+        <div className='flex flex-wrap justify-center mb-6  gap-4 '>
+<button className={` rounded-xl  py-2 px-5 border-2 transition-all duration-300  ${filter==="all" ? "bg-amber-300 text-white border-amber-500 hover:bg-amber-600  ": "bg-emerald-100 text-emerald-300 border-black hover:bg-white "}`} onClick={()=>setFilter('all')}>All</button>
+<button  className={` rounded-xl  py-2 px-5 border-2  transition-all duration-300 ${filter==="completed" ? "bg-amber-300 text-white border-amber-500 hover:bg-amber-600  ": "bg-emerald-100 text-emerald-300 border-black hover:bg-white "}`} onClick={()=>setFilter('completed')}>Completed</button>
+<button   className={` rounded-xl  py-2 px-5 border-2 transition-all duration-300  ${filter==="pending" ? "bg-amber-300 text-white border-amber-500 hover:bg-amber-600  ": "bg-emerald-100 text-emerald-300 border-black hover:bg-white "}`} onClick={()=>setFilter('pending')}>Pending</button>
+<button  className={` rounded-xl  py-2 px-5 border-2  transition-all duration-300 ${filter==="priority" ? "bg-amber-300 text-white border-amber-500 hover:bg-amber-600  ": "bg-emerald-100 text-emerald-300 border-black hover:bg-white "}`} onClick={()=>setFilter('priority')}>Priority</button>
+        </div>
 <div>
   {task.length=== 0 ? (<h1 className='text-3xl font-bold text-center text-emerald-500 text-underline mb-8 mt-4'>No Task Yet</h1>
 ):(
 <>
 <h1 className='text-3xl font-bold text-center text-emerald-500 text-underline mb-8 mt-4'>Tasks List</h1>
   <div className='grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-4 mt-5 text-center'>
-        {task.map((task)=>(
+        {filteredTasks.map((task)=>(
           <div key={task._id}>
 <Card>
 
