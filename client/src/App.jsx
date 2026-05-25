@@ -7,6 +7,7 @@ import Signup from './pages/Signup'
 import ProtectedRoute from './components/ProtectedRoute'
 import Notes from './pages/Notes'
 import Subjects from './pages/Subjects'
+import Task from './pages/Task'
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
   <Route path='/signup' element={<Signup/>}/>
   <Route path='/notes' element={<Notes/>}/>
   <Route path='/subjects' element={<Subjects/>}/>
+  <Route path="/task" element={<Task/>}/>
 </Routes>
 
     </div>

@@ -8,25 +8,27 @@ import connectDB from "./src/config/db.js";
 import { router } from "./src/routes/authRoutes.js";
 import { notesRouter } from "./src/routes/NotesRoutes.js";
 import { subjectRouter } from "./src/routes/SubjectRoutes.js";
+import { taskRouter } from "./src/routes/TaskRoutes.js";
 
-const app=express();
+const app = express();
 app.use(express.json());
 app.use(cors(
     {
-        origin:"http://localhost:5173",
-        credentials:true
+        origin: "http://localhost:5173",
+        credentials: true
 
     }
 ));
 app.use(cookieParser());
-app.get("/",(req,res)=>{
-    res.send({status:1,message:"Api Running"})
-    
+app.get("/", (req, res) => {
+    res.send({ status: 1, message: "Api Running" })
+
 });
-app.use("/api/auth",router)
-app.use("/api/notes",notesRouter)
-app.use("/api/subjects",subjectRouter)
+app.use("/api/auth", router)
+app.use("/api/notes", notesRouter)
+app.use("/api/subjects", subjectRouter)
+app.use("/api/tasks", taskRouter)
 connectDB();
-app.listen(process.env.PORT || 5000,()=>{
+app.listen(process.env.PORT || 5000, () => {
     console.log(`Server is running on port ${process.env.PORT}`)
 })

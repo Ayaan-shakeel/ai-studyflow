@@ -132,7 +132,7 @@ export default function Notes({children}) {
    
 
  <div className='bg-gray-500'>
-    <NewCard note={note} className='mt-4 flex justify-center'>
+    <Card note={note} className='mt-4 flex justify-center'>
       <div className='flex gap-2'>
         <BookOpen/>
         <h2 className='font-bold text-white  mb-3 '>{note.subjectId?.name}</h2>
@@ -143,7 +143,7 @@ export default function Notes({children}) {
 
    <button onClick={()=>deleteNote(note._id)}>Delete</button  >
    
-    </NewCard>
+    </Card>
     </div>
    </div>
 ))}

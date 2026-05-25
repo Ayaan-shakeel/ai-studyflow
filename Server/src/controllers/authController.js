@@ -21,11 +21,13 @@ export const registerUser = async (req, res) => {
             email,
             password: hashedPassword
         })
-        res.status(201).json({ status: 201, message: "User registered Successfully", user:{
-            id:newUser._id,
-            username:newUser.username,
-            email:newUser.email
-        } })
+        res.status(201).json({
+            status: 201, message: "User registered Successfully", user: {
+                id: newUser._id,
+                username: newUser.username,
+                email: newUser.email
+            }
+        })
 
     }
     catch (error) {
@@ -44,35 +46,37 @@ export const loginUser = async (req, res) => {
         if (!registeredUser) {
             return res.status(400).json({ status: 0, message: "Invalid credentials" })
         }
-            const isPasswordMatch = await bcrypt.compare(password, registeredUser.password);
-            if (!isPasswordMatch) {
-                return res.status(400).json({ status: 0, message: "Invalid credentials" })
-            }
-            const token=jwt.sign({id:registeredUser._id},process.env.JWT_SECRET,{expiresIn:"7d"})
-            res.cookie("token",token,{
-                httpOnly:true,
-                secure:false,
-                sameSite:"strict",
-                maxAge:7*24*60*60*1000
-            })
-            res.status(200).json({ status: 1, message: "Login successful", user:{
-                id:registeredUser._id,
-                username:registeredUser.username,
-                email:registeredUser.email
-            } })
-
-        } catch(error) {
-            console.log(error);
-            res.status(500).json({ status: 0, message: error.message });
+        const isPasswordMatch = await bcrypt.compare(password, registeredUser.password);
+        if (!isPasswordMatch) {
+            return res.status(400).json({ status: 0, message: "Invalid credentials" })
         }
-    }
-  export const getProfile=async (req,res)=>{
-    try{
-      res.status(201).json({success:true,message:"Profile fetched Successfully",user:req.user})
-    }
-    catch(error){
+        const token = jwt.sign({ id: registeredUser._id }, process.env.JWT_SECRET, { expiresIn: "7d" })
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: false,
+            sameSite: "strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        })
+        res.status(200).json({
+            status: 1, message: "Login successful", user: {
+                id: registeredUser._id,
+                username: registeredUser.username,
+                email: registeredUser.email
+            }
+        })
+
+    } catch (error) {
         console.log(error);
-        res.status(500).json({status:0,message:error.message})
+        res.status(500).json({ status: 0, message: error.message });
+    }
+}
+export const getProfile = async (req, res) => {
+    try {
+        res.status(201).json({ success: true, message: "Profile fetched Successfully", user: req.user })
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({ status: 0, message: error.message })
     }
 
-  }
+}
