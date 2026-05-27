@@ -7,10 +7,14 @@ import { useNavigate } from 'react-router-dom';
 import Logout from '../components/Logout';
 import Sidebar from '../components/Sidebar';
 import Navbar from '../components/Navbar';
+import { AuthCard } from '../components/AuthCard';
 
 
 export default function Dashboard() {
   const [user, setuser] = useState(null);
+  const [notes, setnotes] = useState([]);
+  const [subjects, setSubjects] = useState([]);
+  const [tasks, setTasks] = useState([])
   const navigate=useNavigate();
   useEffect(()=>{
     const fetchProfile=async()=>{
@@ -27,23 +31,95 @@ export default function Dashboard() {
     }
     fetchProfile();
   },[])
+  useEffect(()=>{
+    
+      const fetchNotes=async()=>{
+        try{
+          const res=await axios.get("http://localhost:5000/api/notes/get-notes",{
+            withCredentials:true
+          })
+          if(res.data.notes){
+            setnotes(res.data.notes)
+          }
+
+        }catch(error){
+          console.log(error.message)
+        }
+      
+    }
+    fetchNotes();
+  },[])
+
+  useEffect(()=>{
+    const fetchSubjects=async()=>{
+      try{
+        const res=await axios.get("http://localhost:5000/api/subjects/get-subjects",{
+          withCredentials:true
+      })
+      if(res.data.subjects){
+        setSubjects(res.data.subjects)
+      }
+    }catch(error){
+      console.log(error.message)
+    }
+  }
+  fetchSubjects();
+  },[])
+  useEffect(()=>{
+    const fetchTasks=async()=>{
+      try{
+        const res=await axios.get("http://localhost:5000/api/tasks/get-tasks",{
+          withCredentials:true
+      })
+      if(res.data.tasks){
+        setTasks(res.data.tasks)
+      }
+    }catch(error){
+      console.log(error.message)
+    }
+  }
+  fetchTasks();
+  },[])
+const pendingTasks=tasks.filter(tasks=>!tasks.isDone)
+
   if(!user){
     return <h1>Loading...</h1>
   }
  
   return (
-    <div className='flex'>
+    <div className='flex min-h-screen bg-linear-to-br from-slate-950 via-blue-950 to-gray-900'>
       <Sidebar/>
       <div className='flex-1'>
        <Navbar user={user} />
+     <div className='text-center text-3xl sm:text-2xl text-white mt-6 mb-7'>
+
+      <h1 className='text-4xl sm:text-3xl text-center text-white font-extrabold mt-10 mb-6'>Welcome Back, {user?.username} </h1>
+      <p className='text-2xl font-semibold text-gray-300 mb-7'>
+        Track your Productivity and study smarter
+      </p>
+     </div>
      
-      <h1 className='text-2xl text-center font-bold mb-4'>Welcome to Dashboard </h1>
-      <Card>
-        <h1>Dashboard Content</h1>
-     <h2>{user?.username}</h2>
-     <h3>{user?.email}</h3>
+<div className='grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-5 mt-5 mb-5'>
+
+      <Card className='hover:scale-105 transition-all duration-300'>
+        <h1 className='font-bold text-2xl text-white text-center mb-6 '>Notes</h1>
+        <p className='text-white text-center text-3xl  mb-3 font-extrabold'>Total Notes : {notes.length===0?"No Note Yet":notes.length}</p>
       </Card>
-<Logout/>
+      <Card className='hover:scale-105 transition-all duration-300'>
+        <h1 className='font-bold text-2xl text-white text-center mb-6 '>Subjects</h1>
+       <p className='text-white text-center text-3xl  mb-3 font-extrabold' >Total Subjects : {subjects.length===0?"No Subjects yet":subjects.length}</p>
+      </Card>
+      <Card className='hover:scale-105 transition-all duration-300'>
+        <h1 className='font-bold text-2xl text-white text-center mb-6 '>Tasks</h1>
+        <p className='text-white text-center text-3xl  mb-3 font-extrabold'>Total Tasks : {tasks.length===0?"No Tasks Yet":tasks.length}</p>
+      </Card>
+      <Card className='hover:scale-105 transition-all duration-300'>
+        <h1 className='font-bold text-2xl text-red-400 text-center mb-6 '>Pending Tasks</h1>
+        <p className='text-white text-center text-3xl  mb-3 font-extrabold'>Pending Tasks : {pendingTasks.length===0?"No Pending Tasks Yet":pendingTasks.length}</p>
+      </Card>
+</div>
+
+
 
       </div>
 
