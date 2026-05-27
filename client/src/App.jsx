@@ -8,6 +8,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 import Notes from './pages/Notes'
 import Subjects from './pages/Subjects'
 import Task from './pages/Task'
+import StudyTimer from './pages/StudyTimer'
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
   <Route path='/notes' element={<Notes/>}/>
   <Route path='/subjects' element={<Subjects/>}/>
   <Route path="/task" element={<Task/>}/>
+  <Route path="/study-timer" element={<StudyTimer/>}></Route>
 </Routes>
 
     </div>
