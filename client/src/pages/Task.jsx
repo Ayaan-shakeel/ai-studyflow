@@ -7,6 +7,7 @@ import { AuthCard } from '../components/AuthCard'
 import { TaskCard } from '../components/TaskCard'
 import { Trash2 } from 'lucide-react'
 import Navbar from '../components/Navbar'
+import { useLocation } from 'react-router-dom';
 
 export default function Task({user}) {
     const [task, setTask] = useState([])
@@ -36,6 +37,12 @@ export default function Task({user}) {
       fetchTasks()
     },[]);
 
+    const location=useLocation();
+    useEffect(()=>{
+if(location.state?.filter){
+  setFilter(location.state.filter)
+}
+    },[])
   const handleSubmit=async(e)=>{
     e.preventDefault();
     try{
@@ -92,6 +99,7 @@ const filteredTasks=task.filter((task)=>{
   };
   return matchesSearch;
 })
+
   return (
     <div className=' min-h-screen bg-linear-to-br from-blue-950 via-slate-900 to-gray-800'>
       <div>
