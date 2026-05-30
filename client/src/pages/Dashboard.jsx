@@ -9,6 +9,7 @@ import Sidebar from '../components/Sidebar';
 import Navbar from '../components/Navbar';
 import { AuthCard } from '../components/AuthCard';
 import { CheckCircleIcon, FolderIcon, NotebookIcon, ClockIcon } from 'lucide-react';
+import PageLoader from '../components/PageLoader';
 
 
 export default function Dashboard() {
@@ -83,12 +84,31 @@ export default function Dashboard() {
   },[])
 const pendingTasks=tasks.filter(tasks=>!tasks.isDone)
 
+const completedTasks=tasks.filter(tasks=>tasks.isDone).length
+const pendingTask=tasks.filter(tasks=>!tasks.isDone).length
+
+const completionRate= tasks.length? Math.round((completedTasks/tasks.length)*100):
+0;
+let message="";
+if(completionRate===100){
+  message ="Perfect! You have completed all your tasks. Good job!"
+
+}else if(completionRate>60 && completionRate<100){
+  message="Good progress! Keep it up"
+}
+else if(completionRate>1 && completionRate<60){
+  message="Keep it up! You are almost there"
+}else{
+  message="Start Your Journey"
+}
   if(!user){
-    return <h1>Loading...</h1>
+    return <PageLoader/>
   }
  
   return (
-    <div className='flex min-h-screen bg-linear-to-br from-slate-950 via-blue-950 to-gray-900'>
+
+
+<div className='flex min-h-screen bg-linear-to-br from-slate-950 via-blue-950 to-gray-900'>
       <Sidebar/>
       <div className='flex-1'>
        <Navbar user={user} />
@@ -117,10 +137,6 @@ const pendingTasks=tasks.filter(tasks=>!tasks.isDone)
               <h1 className='text-3xl font-bold mb-2'>Total Notes</h1>
              <h1 className='text-3xl font-extrabold text-gray-300'>
               {notes.length}
-              <h1>
-
-              
-              </h1>
               </h1>
             </div>
             )}
@@ -193,6 +209,29 @@ const pendingTasks=tasks.filter(tasks=>!tasks.isDone)
             </div>
             )}
       </Card>
+        <Card>
+      
+        <div className='text-center text-white mt-6'>
+          <h1 className=' text-3xl font-bold mb-6'>Completion Rate</h1>
+          <div className='w-full bg-gray-700 h-3 mb-3 rounded-full'>
+
+          <div className='bg-green-400 rounded-b-full h-3'
+            style = {{width:`${completionRate}%`}}
+            >
+
+            </div>
+              </div>
+           
+
+
+        <div className='text-center text-white mt-6'>
+          <h1 className='text-3xl font-bold mb-2'>Completion Rate</h1>
+          <h1>You are {completionRate}% Productive today</h1>
+          <h2>{message}</h2>
+        </div>
+        </div>
+        </Card>
+      
 </div>
 
 
@@ -200,5 +239,6 @@ const pendingTasks=tasks.filter(tasks=>!tasks.isDone)
       </div>
 
     </div>
+            
   )
 }
