@@ -17,6 +17,7 @@ export default function Dashboard() {
   const [notes, setnotes] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [tasks, setTasks] = useState([])
+  const [darkMode, setDarkMode] = useState(true)
   const navigate=useNavigate();
   useEffect(()=>{
     const fetchProfile=async()=>{
@@ -25,13 +26,20 @@ export default function Dashboard() {
           withCredentials:true
         })
         setuser(res.data.user)  
-        console.log(res.data.user?.id)
+        // console.log(res.data.user?.id)
       }catch(error){
         console.log(error.message)
         navigate("/login")
       }
     }
     fetchProfile();
+  },[])
+  useEffect(()=>{
+    const savedTheme=localStorage.getItem("theme")
+    if(savedTheme !== null){
+      setDarkMode(JSON.parse(savedTheme))
+      // localStorage.setItem("theme",darkMode)
+}
   },[])
   useEffect(()=>{
     
@@ -108,12 +116,16 @@ else if(completionRate>1 && completionRate<60){
   return (
 
 
-<div className='flex min-h-screen bg-linear-to-br from-slate-950 via-blue-950 to-gray-900'>
+<div className={darkMode ? "bg-white-950 text-black":"bg-linear-to-br from-slate-950 via-blue-950 to-gray-900 text-white" }>
+<div className='flex min-h-screen'>
+
+  
+  {/* flex min-h-screen bg-linear-to-br from-slate-950 via-blue-950 to-gray-900 */}
       <Sidebar/>
       <div className='flex-1'>
        <Navbar user={user} />
      <div className='text-center text-3xl sm:text-2xl text-white mt-6 mb-7'>
-
+<button className='bg-green-700' onClick={()=>setDarkMode(!darkMode)}>{darkMode?"LightMode":"DarkMode"}</button>
       <h1 className='text-4xl sm:text-3xl text-center text-white font-extrabold mt-10 mb-6'>Welcome Back, {user?.username} </h1>
       <p className='text-2xl font-semibold text-gray-300 mb-7'>
         Track your Productivity and study smarter
@@ -157,10 +169,7 @@ else if(completionRate>1 && completionRate<60){
               <h1 className='text-3xl font-bold mb-2'>Total Subjects</h1>
              <h1 className='text-3xl font-extrabold text-gray-300'>
               {subjects.length}
-              <h1>
-
               
-              </h1>
               </h1>
             </div>
             )}
@@ -179,10 +188,7 @@ else if(completionRate>1 && completionRate<60){
               <h1 className='text-3xl font-bold mb-2'>Total Tasks</h1>
              <h1 className='text-3xl font-extrabold text-gray-300'>
               {tasks.length}
-              <h1>
-
-              
-              </h1>
+             
               </h1>
             </div>
             )}
@@ -201,10 +207,7 @@ else if(completionRate>1 && completionRate<60){
               {/* <h1 className='text-3xl font-bold mb-2'>Total Pending Tasks</h1> */}
              <h1 className='text-3xl font-extrabold text-gray-300'>
               {pendingTasks.length > 0 ? `You have ${pendingTasks.length} pending tasks to finish today`:"All tasks are completed. Great Work!"}
-              <h1>
-
-              
-              </h1>
+            
               </h1>
             </div>
             )}
@@ -240,5 +243,6 @@ else if(completionRate>1 && completionRate<60){
 
     </div>
             
+</div>
   )
 }
