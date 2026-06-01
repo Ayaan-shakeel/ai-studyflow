@@ -2,12 +2,16 @@ import axios from 'axios';
 import React from 'react'
 import { useState } from 'react'
 import { AuthCard } from '../components/AuthCard';
+import { Toaster } from 'react-hot-toast';
+import {toast} from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
   const [formData, setformData] = useState({
     email:"",
     password:""
   })
+  const navigate=useNavigate();
 const handleChange=(e)=>{
   const inputName=e.target.name;
   const inputValue=e.target.value;
@@ -20,12 +24,17 @@ const handleSubmit= async(e)=>{
     const response= await axios.post("http://localhost:5000/api/auth/login",formData,{
       withCredentials:true
     })
+    toast.success("Login Successful")
+    navigate("/dashboard")
     console.log(response.data)
   }catch(error){
+    toast.error("Login Failed")
     console.log(error.message)
   }
 }
   return (
+    <>
+    <Toaster position="top-right " reverse={false}/>
     <AuthCard>
 
     <div>
@@ -38,5 +47,6 @@ const handleSubmit= async(e)=>{
    </form>
     </div>
     </AuthCard>
+    </>
   )
 }

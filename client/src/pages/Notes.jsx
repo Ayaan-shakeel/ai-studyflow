@@ -6,6 +6,10 @@ import Card from '../components/Card';
 import NotesCard from '../components/NotesCard';
 import { BookOpen } from 'lucide-react';
 import NewCard from '../components/NewCard';
+import { Toaster } from 'react-hot-toast';
+import {toast} from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+
 
 export default function Notes({children}) {
   const [user, setuser] = useState(null);
@@ -60,10 +64,13 @@ export default function Notes({children}) {
         withCredentials:true
       })
       if(res.data.status===1){
+        toast.success("Note Added Successfully")
+
         setnotes([res.data.note,...notes])
         setformData({title:"",content:""})
       }
     }catch(error){
+      toast.error("Create Note Failed")
       console.log(error);
     }
     }
@@ -73,9 +80,11 @@ export default function Notes({children}) {
           withCredentials:true
         })
         if(res.data.status===1){
+          toast.success("Note Deleted Successfully")
           setnotes(notes.filter(note=>note._id!==id))
         }
       }catch(error){
+        toast.error("Note Delete Failed")
         console.log(error);
       }
     }
@@ -99,6 +108,8 @@ export default function Notes({children}) {
     return matchesSearch && matchesSubject
   })
   return (
+    <>
+    <Toaster position="top-right" reverse={false}/>
     <div className='bg-linear-to-br from-slate-950 via-indigo-950 to-slate-900'>
        {/* <div className='flex'>
             <Sidebar/> */}
@@ -189,6 +200,7 @@ export default function Notes({children}) {
       </div>
     // </div>
             
+    </>
     // </div>
   )
 }

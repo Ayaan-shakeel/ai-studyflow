@@ -7,7 +7,7 @@ export default function Logout() {
     }
   return (
     <div>
-      <button onClick={handleLogout}>Logout</button>
+      <button className="bg-white" onClick={handleLogout}>Logout</button>
     </div>
   )
 }

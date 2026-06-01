@@ -235,12 +235,12 @@ else if(completionRate>1 && completionRate<60){
         </div>
         </Card>
       
+<Logout/>
 </div>
 
 
 
       </div>
-
     </div>
             
 </div>

@@ -2,6 +2,9 @@ import React from 'react'
 import { useState } from 'react'
 import axios from 'axios'
 import { AuthCard } from '../components/AuthCard'
+import { Toaster } from 'react-hot-toast';
+import {toast} from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 export default function Signup() {
   const [formData, setformData] = useState({
@@ -9,6 +12,7 @@ export default function Signup() {
     email:"",
     password:""
   })
+  const navigate=useNavigate();
   const handleChange=(e)=>{
     const inputName=e.target.name;
     const inputValue=e.target.value;
@@ -20,12 +24,18 @@ export default function Signup() {
       const response= await axios.post("http://localhost:5000/api/auth/register",formData,{
         withCredentials:true
       })
+      toast.success("SignUp Successful")
+      navigate("/dashboard")
+
       console.log(response.data)
     }catch(error){
+      toast.error("SignUp Failed")
       console.log(error.message)
     }
   }
   return (
+    <>
+     <Toaster position="top-right" reverse={false}/>
     <AuthCard>
 
     <div>
@@ -41,5 +51,6 @@ export default function Signup() {
       </form>
     </div>
     </AuthCard> 
+    </>
   )
 }

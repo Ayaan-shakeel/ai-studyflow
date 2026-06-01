@@ -8,6 +8,10 @@ import { TaskCard } from '../components/TaskCard'
 import { Trash2 } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import { useLocation } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+import {toast} from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+
 
 export default function Task({user}) {
     const [task, setTask] = useState([])
@@ -50,10 +54,12 @@ if(location.state?.filter){
         withCredentials:true
     })
     if(res.data.status===1){
+      toast.success("Task Added Successfully")
       setTask([res.data.task,...task]);
       setFormData({title:'',dueDate:'',isPriority:false,isDone:false})
     }
     }catch(error){
+      toast.error("Create Task Failed")
       console.log(error)
   }
 }
@@ -76,10 +82,12 @@ const deleteTask=async(id)=>{
       withCredentials:true
   })
   if(res.data.status===1){
+    toast.success("Task Deleted Successfully")
     setTask(task.filter(task=>task._id!==id))
     console.log(task.filter(task=>task._id!==id))
   }
 }catch(error){
+  toast.error("Task Delete Failed")
   console.log(error)
 }
 }
@@ -101,6 +109,8 @@ const filteredTasks=task.filter((task)=>{
 })
 
   return (
+    <>
+    <Toaster position="top-right" reverse={false}/>
     <div className=' min-h-screen bg-linear-to-br from-blue-950 via-slate-900 to-gray-800'>
       <div>
         <Navbar user={user}/>
@@ -138,7 +148,7 @@ const filteredTasks=task.filter((task)=>{
 <div>
   {task.length=== 0 ? (<h1 className='text-3xl font-bold text-center text-emerald-500 text-underline mb-8 mt-4'>No Task Yet</h1>
 ):(
-<>
+  <>
 <h1 className='text-3xl font-bold text-center text-emerald-500 text-underline mb-8 mt-4'>Tasks List</h1>
   <div className='grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-4 mt-5 text-center'>
         {filteredTasks.map((task)=>(
@@ -162,5 +172,6 @@ const filteredTasks=task.filter((task)=>{
   )}
   </div>
     </div>
+  </>
   )
 }
