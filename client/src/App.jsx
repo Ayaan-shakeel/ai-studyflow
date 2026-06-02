@@ -9,10 +9,13 @@ import Notes from './pages/Notes'
 import Subjects from './pages/Subjects'
 import Task from './pages/Task'
 import StudyTimer from './pages/StudyTimer'
+import AIStudy from './pages/AIStudy'
+import Navbar from './components/Navbar'
 
-export default function App() {
+export default function App({user}) {
   return (
     <div>
+      <Navbar user={user}/>
 <Routes>
   <Route path="/" element={<Home/>}/>
   <Route path='/dashboard' element={<Dashboard/>}/>
@@ -22,6 +25,7 @@ export default function App() {
   <Route path='/subjects' element={<Subjects/>}/>
   <Route path="/task" element={<Task/>}/>
   <Route path="/study-timer" element={<StudyTimer/>}></Route>
+  <Route path="/ai-study" element={<AIStudy/>}></Route>
 </Routes>
 
     </div>
