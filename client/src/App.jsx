@@ -23,7 +23,7 @@ export default function App({user}) {
   <Route path='/signup' element={<Signup/>}/>
   <Route path='/notes' element={<Notes/>}/>
   <Route path='/subjects' element={<Subjects/>}/>
-  <Route path="/task" element={<Task/>}/>
+  <Route path="/tasks" element={<Task/>}/>
   <Route path="/study-timer" element={<StudyTimer/>}></Route>
   <Route path="/ai-study" element={<AIStudy/>}></Route>
 </Routes>

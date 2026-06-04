@@ -1,177 +1,389 @@
-import axios from 'axios'
-import React, { useEffect } from 'react'
-import { useState } from 'react'
-import Card from '../components/Card'
-import { Star } from 'lucide-react'
-import { AuthCard } from '../components/AuthCard'
-import { TaskCard } from '../components/TaskCard'
-import { Trash2 } from 'lucide-react'
-import Navbar from '../components/Navbar'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { Star, Trash2, Search, CalendarDays, CircleCheckBig, Plus, ListTodo, Filter } from 'lucide-react';
+import Navbar from '../components/Navbar';
 import { useLocation } from 'react-router-dom';
-import { Toaster } from 'react-hot-toast';
-import {toast} from 'react-hot-toast';
+import { Toaster, toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import Sidebar from '../components/Sidebar';
+import { motion } from 'framer-motion';
 
+export default function Task({ user }) {
+  const [task, setTask] = useState([]);
+  const [formData, setFormData] = useState({
+    title: '',
+    dueDate: '',
+    isPriority: false,
+    isDone: false
+  });
+  const [search, setSearch] = useState('');
+  const [filter, setFilter] = useState('all');
 
-export default function Task({user}) {
-    const [task, setTask] = useState([])
-    const [formData, setFormData] = useState({
-        title:'',
-        dueDate:'',
-        isPriority:false,
-        isDone:false
-
-    })
-    const [search, setSearch] = useState('');
-    const [filter,setFilter]=useState('all')
-    useEffect(()=>{
-      const fetchTasks=async()=>{
-        try{
-          const res=await axios.get("http://localhost:5000/api/tasks/get-tasks",{
-            withCredentials:true
-          })
-          if(res.data.status===1){
-            setTask(res.data.tasks)
-          }
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/tasks/get-tasks", {
+          withCredentials: true
+        });
+        if (res.data.status === 1) {
+          setTask(res.data.tasks);
         }
-        catch(error){
-          console.log(error)
-        }
+      } catch (error) {
+        console.log(error);
       }
-      fetchTasks()
-    },[]);
+    };
+    fetchTasks();
+  }, []);
 
-    const location=useLocation();
-    useEffect(()=>{
-if(location.state?.filter){
-  setFilter(location.state.filter)
-}
-    },[])
-  const handleSubmit=async(e)=>{
-    e.preventDefault();
-    try{
-      const res=await axios.post("http://localhost:5000/api/tasks/create-task",formData,{
-        withCredentials:true
-    })
-    if(res.data.status===1){
-      toast.success("Task Added Successfully")
-      setTask([res.data.task,...task]);
-      setFormData({title:'',dueDate:'',isPriority:false,isDone:false})
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.filter) {
+      setFilter(location.state.filter);
     }
-    }catch(error){
-      toast.error("Create Task Failed")
-      console.log(error)
-  }
-}
-const toggleTask=async(id,currentStatus)=>{
-  try{
-    const res=await axios.put(`http://localhost:5000/api/tasks/update-task/${id}`,
-      {isDone:!currentStatus},{
-      withCredentials:true
-  })
-  if(res.data.status===1){
-    setTask(task.map((t)=>t._id===id?{...t,isDone:!currentStatus}:t))
-  }
-  } catch(error){
-    console.log(error)
-  }
-}
-const deleteTask=async(id)=>{
-  try{
-    const res=await axios.delete(`http://localhost:5000/api/tasks/delete-task/${id}`,{
-      withCredentials:true
-  })
-  if(res.data.status===1){
-    toast.success("Task Deleted Successfully")
-    setTask(task.filter(task=>task._id!==id))
-    console.log(task.filter(task=>task._id!==id))
-  }
-}catch(error){
-  toast.error("Task Delete Failed")
-  console.log(error)
-}
-}
-const filteredTasks=task.filter((task)=>{
-  const matchesSearch= task.title.toLowerCase().includes(search.toLowerCase());
-  if(filter==='completed'){
-    return matchesSearch && task.isDone
-    
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("http://localhost:5000/api/tasks/create-task", formData, {
+        withCredentials: true
+      });
+      if (res.data.status === 1) {
+        toast.success("Task Added Successfully");
+        setTask([res.data.task, ...task]);
+        setFormData({ title: '', dueDate: '', isPriority: false, isDone: false });
+      }
+    } catch (error) {
+      toast.error("Create Task Failed");
+      console.log(error);
+    }
   };
-  if(filter==='pending'){
-    return matchesSearch && !task.isDone
-     
+
+  const toggleTask = async (id, currentStatus) => {
+    try {
+      const res = await axios.put(
+        `http://localhost:5000/api/tasks/update-task/${id}`,
+        { isDone: !currentStatus },
+        {
+          withCredentials: true
+        }
+      );
+      if (res.data.status === 1) {
+        setTask(task.map((t) => t._id === id ? { ...t, isDone: !currentStatus } : t));
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
-  if(filter==='priority'){
-    return matchesSearch && task.isPriority
-     
+
+  const deleteTask = async (id) => {
+    try {
+      const res = await axios.delete(`http://localhost:5000/api/tasks/delete-task/${id}`, {
+        withCredentials: true
+      });
+      if (res.data.status === 1) {
+        toast.success("Task Deleted Successfully");
+        setTask(task.filter(task => task._id !== id));
+        console.log(task.filter(task => task._id !== id));
+      }
+    } catch (error) {
+      toast.error("Task Delete Failed");
+      console.log(error);
+    }
   };
-  return matchesSearch;
-})
+
+  const filteredTasks = task.filter((task) => {
+    const matchesSearch = task.title.toLowerCase().includes(search.toLowerCase());
+    if (filter === 'completed') {
+      return matchesSearch && task.isDone;
+    }
+    if (filter === 'pending') {
+      return matchesSearch && !task.isDone;
+    }
+    if (filter === 'priority') {
+      return matchesSearch && task.isPriority;
+    }
+    return matchesSearch;
+  });
+
+  const filterButtonClass = (name) =>
+    `rounded-2xl px-4 py-2.5 text-sm font-medium border transition-all duration-300 active:scale-[0.98] ${
+      filter === name
+        ? "bg-cyan-500 text-slate-950 border-cyan-400 shadow-lg shadow-cyan-950/30"
+        : "bg-white/5 text-slate-200 border-white/10 hover:bg-white/10"
+    }`;
 
   return (
     <>
-    <Toaster position="top-right" reverse={false}/>
-    <div className=' min-h-screen bg-linear-to-br from-blue-950 via-slate-900 to-gray-800'>
-      <div>
-        <Navbar user={user}/>
-      </div>
-      <TaskCard>
+      <Toaster position="top-right" reverseOrder={false} />
 
-        <form className='flex flex-col justify-center items-center' onSubmit={handleSubmit}>
-        <h1 className='font-bold text-cyan-600 text-3xl mb-5'>Task</h1>
-        <div>
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 text-white">
+        <div className="flex min-h-screen">
+          <Sidebar />
 
-          <input className='bg-white w-full p-2 text-center text-black rounded-xl' type="text" placeholder="Enter Task" name="title" id="title" value={formData.title} onChange={(e)=>setFormData({...formData,title:e.target.value})} />
-        </div>
-        <div>
-      <label className='text-black'>Due Date : </label>
-          <input className='border-none bg-white rounded-xl mt-6' type="Date"  name="dueDate" id="dueDate" value={formData.dueDate} onChange={(e)=>setFormData({...formData,dueDate:e.target.value})} />
-        </div>
-        <div> 
-          <input className='mt-5' type="checkbox"  name="isPriority" id="isPriority" checked={formData.isPriority} onChange={(e)=>setFormData({...formData,isPriority:e.target.checked})} />
-          <label className="text-black mt-5" htmlFor="priority"> : isPriority</label>
-        </div>
-        <div>
-          <button className='bg-linear-to-br from-blue-400 via-pink-200  to-purple-500 w-full p-2 mt-4 rounded-xl' type="submit">Add Task</button>
-        </div>
-        </form>
-        </TaskCard>
-        <div className='flex justify-center mb-5'>
-          <input className='w-[90%] md:w-[60%] lg:w-[40%] rounded-xl bg-white text-black outline-none p-3' type="search" placeholder='Search Tasks ....' name="search" id="search" value={search} onChange={(e)=>setSearch(e.target.value)} />
-        </div>
-        <div className='flex flex-wrap justify-center mb-6  gap-4 '>
-<button className={` rounded-xl  py-2 px-5 border-2 transition-all duration-300  ${filter==="all" ? "bg-amber-300 text-white border-amber-500 hover:bg-amber-600  ": "bg-emerald-100 text-emerald-300 border-black hover:bg-white "}`} onClick={()=>setFilter('all')}>All</button>
-<button  className={` rounded-xl  py-2 px-5 border-2  transition-all duration-300 ${filter==="completed" ? "bg-amber-300 text-white border-amber-500 hover:bg-amber-600  ": "bg-emerald-100 text-emerald-300 border-black hover:bg-white "}`} onClick={()=>setFilter('completed')}>Completed</button>
-<button   className={` rounded-xl  py-2 px-5 border-2 transition-all duration-300  ${filter==="pending" ? "bg-amber-300 text-white border-amber-500 hover:bg-amber-600  ": "bg-emerald-100 text-emerald-300 border-black hover:bg-white "}`} onClick={()=>setFilter('pending')}>Pending</button>
-<button  className={` rounded-xl  py-2 px-5 border-2  transition-all duration-300 ${filter==="priority" ? "bg-amber-300 text-white border-amber-500 hover:bg-amber-600  ": "bg-emerald-100 text-emerald-300 border-black hover:bg-white "}`} onClick={()=>setFilter('priority')}>Priority</button>
-        </div>
-<div>
-  {task.length=== 0 ? (<h1 className='text-3xl font-bold text-center text-emerald-500 text-underline mb-8 mt-4'>No Task Yet</h1>
-):(
-  <>
-<h1 className='text-3xl font-bold text-center text-emerald-500 text-underline mb-8 mt-4'>Tasks List</h1>
-  <div className='grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-4 mt-5 text-center'>
-        {filteredTasks.map((task)=>(
-          <div key={task._id}>
-<Card>
+          <div className="flex-1 min-w-0">
+            <Navbar user={user} />
 
+            <main className="px-4 sm:px-6 lg:px-8 py-6 md:py-8">
+              <div className="max-w-7xl mx-auto space-y-8">
+                <motion.section
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.35 }}
+                  className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-5 sm:p-6 lg:p-8 shadow-[0_10px_35px_rgba(0,0,0,0.28)]"
+                >
+                  <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+                    <div className="max-w-2xl">
+                      <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-300 mb-4">
+                        <ListTodo className="w-3.5 h-3.5" />
+                        Manage your daily workflow
+                      </div>
 
-          <div className=" flex items-center justify-between mb-5 gap-2 font-bold text-red-500"> {task.isPriority &&  <Star size={18}/>}
-<button onClick={()=>deleteTask(task._id)}><Trash2 size={18} /></button>
+                      <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-white">
+                        Tasks
+                      </h1>
+
+                      <p className="mt-3 text-sm sm:text-base text-slate-300">
+                        Add tasks, mark them complete, and filter your workflow by status or priority.
+                      </p>
+                    </div>
+
+                    <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 min-w-[150px]">
+                      <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Total Tasks</p>
+                      <p className="mt-2 text-3xl font-bold text-white tabular-nums">{task.length}</p>
+                    </div>
+                  </div>
+                </motion.section>
+
+                <motion.section
+                  initial={{ opacity: 0, y: 18 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.05 }}
+                  className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-5 sm:p-6 lg:p-8 shadow-[0_10px_35px_rgba(0,0,0,0.24)]"
+                >
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="rounded-2xl border border-cyan-400/20 bg-cyan-500/10 p-3">
+                      <Plus className="w-5 h-5 text-cyan-300" />
+                    </div>
+                    <div>
+                      <h2 className="text-lg sm:text-xl font-semibold text-white">Create Task</h2>
+                      <p className="text-sm text-slate-300">
+                        Add a task with due date and priority in one step.
+                      </p>
+                    </div>
+                  </div>
+
+                  <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+                    <div className="lg:col-span-6">
+                      <label htmlFor="title" className="block text-sm font-medium text-slate-200 mb-2">
+                        Task title
+                      </label>
+                      <input
+                        className="w-full rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-white placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-cyan-500/70"
+                        type="text"
+                        placeholder="Enter task"
+                        name="title"
+                        id="title"
+                        value={formData.title}
+                        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                      />
+                    </div>
+
+                    <div className="lg:col-span-3">
+                      <label htmlFor="dueDate" className="block text-sm font-medium text-slate-200 mb-2">
+                        Due date
+                      </label>
+                      <input
+                        className="w-full rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-white outline-none focus:ring-2 focus:ring-cyan-500/70"
+                        type="date"
+                        name="dueDate"
+                        id="dueDate"
+                        value={formData.dueDate}
+                        onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
+                      />
+                    </div>
+
+                    <div className="lg:col-span-3 flex items-end">
+                      <label className="flex w-full items-center gap-3 rounded-2xl border border-white/10 bg-white/10 px-4 py-3 cursor-pointer">
+                        <input
+                          className="h-4 w-4 accent-cyan-500"
+                          type="checkbox"
+                          name="isPriority"
+                          id="isPriority"
+                          checked={formData.isPriority}
+                          onChange={(e) => setFormData({ ...formData, isPriority: e.target.checked })}
+                        />
+                        <span className="text-sm text-slate-200">Mark as priority</span>
+                      </label>
+                    </div>
+
+                    <div className="lg:col-span-12">
+                      <button
+                        className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-2xl bg-cyan-500 px-5 py-3 font-semibold text-slate-950 hover:bg-cyan-400 active:scale-[0.98] transition-all duration-300 shadow-lg shadow-cyan-950/30"
+                        type="submit"
+                      >
+                        <Plus className="w-4 h-4" />
+                        Add Task
+                      </button>
+                    </div>
+                  </form>
+                </motion.section>
+
+                <motion.section
+                  initial={{ opacity: 0, y: 18 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.45, delay: 0.08 }}
+                  className="space-y-5"
+                >
+                  <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-4 sm:p-5 shadow-[0_8px_25px_rgba(0,0,0,0.22)]">
+                    <div className="flex flex-col lg:flex-row gap-4 lg:items-center lg:justify-between">
+                      <div className="relative w-full lg:max-w-md">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                        <input
+                          className="w-full rounded-2xl border border-white/10 bg-white/10 pl-11 pr-4 py-3 text-white placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-cyan-500/70"
+                          type="search"
+                          placeholder="Search tasks..."
+                          name="search"
+                          id="search"
+                          value={search}
+                          onChange={(e) => setSearch(e.target.value)}
+                        />
+                      </div>
+
+                      <div className="flex flex-wrap gap-3">
+                        <button className={filterButtonClass("all")} onClick={() => setFilter('all')}>
+                          All
+                        </button>
+                        <button className={filterButtonClass("completed")} onClick={() => setFilter('completed')}>
+                          Completed
+                        </button>
+                        <button className={filterButtonClass("pending")} onClick={() => setFilter('pending')}>
+                          Pending
+                        </button>
+                        <button className={filterButtonClass("priority")} onClick={() => setFilter('priority')}>
+                          Priority
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    {task.length === 0 ? (
+                      <div className="rounded-3xl border border-dashed border-white/15 bg-white/5 p-10 text-center backdrop-blur-xl">
+                        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5">
+                          <ListTodo className="w-6 h-6 text-slate-300" />
+                        </div>
+                        <h2 className="text-2xl font-bold text-white">No Task Yet</h2>
+                        <p className="mt-2 text-slate-300">
+                          Add your first task to start planning your work.
+                        </p>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="flex items-center justify-between gap-3 mb-5">
+                          <div>
+                            <h2 className="text-2xl font-bold text-white">Tasks List</h2>
+                            <p className="text-sm text-slate-300 mt-1">
+                              {filteredTasks.length} task{filteredTasks.length !== 1 ? "s" : ""} shown
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+                          {filteredTasks.map((taskItem, index) => (
+                            <motion.div
+                              key={taskItem._id}
+                              initial={{ opacity: 0, y: 18 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ duration: 0.3, delay: index * 0.05 }}
+                              className="h-full"
+                            >
+                              <div className={`h-full rounded-3xl border p-5 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 shadow-[0_8px_25px_rgba(0,0,0,0.22)] ${
+                                taskItem.isDone
+                                  ? "border-emerald-400/20 bg-emerald-500/10"
+                                  : "border-white/10 bg-white/5"
+                              }`}>
+                                <div className="flex items-start justify-between gap-3 mb-5">
+                                  <div className="flex items-center gap-2">
+                                    {taskItem.isPriority && (
+                                      <span className="inline-flex items-center gap-1 rounded-full border border-amber-400/20 bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-300">
+                                        <Star className="w-3.5 h-3.5 fill-amber-300" />
+                                        Priority
+                                      </span>
+                                    )}
+                                    {!taskItem.isPriority && (
+                                      <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-300">
+                                        Normal
+                                      </span>
+                                    )}
+                                  </div>
+
+                                  <button
+                                    onClick={() => deleteTask(taskItem._id)}
+                                    className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-red-400/20 bg-red-500/10 text-red-300 hover:bg-red-500/20 active:scale-[0.96]"
+                                    aria-label={`Delete ${taskItem.title}`}
+                                  >
+                                    <Trash2 className="w-4 h-4" />
+                                  </button>
+                                </div>
+
+                                <h3
+                                  className={`text-lg sm:text-xl font-semibold break-words mb-4 ${
+                                    taskItem.isDone
+                                      ? "line-through text-slate-400"
+                                      : "text-white"
+                                  }`}
+                                >
+                                  {taskItem.title}
+                                </h3>
+
+                                <div className="space-y-3 mb-6">
+                                  {taskItem.dueDate ? (
+                                    <div className="flex items-center gap-2 text-sm text-slate-300">
+                                      <CalendarDays className="w-4 h-4 text-cyan-300" />
+                                      <span>
+                                        Due Date: {new Date(taskItem.dueDate).toLocaleDateString()}
+                                      </span>
+                                    </div>
+                                  ) : (
+                                    <div className="flex items-center gap-2 text-sm text-slate-400">
+                                      <CalendarDays className="w-4 h-4" />
+                                      <span>No due date set</span>
+                                    </div>
+                                  )}
+
+                                  <div className="flex items-center gap-2 text-sm">
+                                    <CircleCheckBig className={`w-4 h-4 ${taskItem.isDone ? "text-emerald-300" : "text-slate-400"}`} />
+                                    <span className={taskItem.isDone ? "text-emerald-200" : "text-slate-300"}>
+                                      {taskItem.isDone ? "Completed task" : "Pending task"}
+                                    </span>
+                                  </div>
+                                </div>
+
+                                <button
+                                  className={`w-full rounded-2xl p-3.5 font-semibold text-white transition-all duration-300 active:scale-[0.98] ${
+                                    taskItem.isDone
+                                      ? "bg-emerald-500 hover:bg-emerald-400"
+                                      : "bg-cyan-500 hover:bg-cyan-400"
+                                  }`}
+                                  onClick={() => toggleTask(taskItem._id, taskItem.isDone)}
+                                >
+                                  {taskItem.isDone ? "Completed" : "Mark Complete"}
+                                </button>
+                              </div>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </motion.section>
+              </div>
+            </main>
           </div>
-          <h1 className={`text-xl text-lime-100 mb-5 font-bold ${task.isDone ? "line-through text-gray-400" :"text-black"}`}>{task.title}</h1>
-
-          {task.dueDate && <h2 className="font-semibold mb-5">Due Date : {""}{
-            new Date(task.dueDate).toLocaleDateString()}</h2>}
-         <button className={`mb-3 w-full  transition-all duration-300 text-white rounded-xl p-4 font-semibold ${task.isDone ? "bg-teal-500 hover:bg-teal-300" : "bg-cyan-500 hover:bg-cyan-300"}`} onClick={()=>toggleTask(task._id,task.isDone)}>{task.isDone?"Completed":"Mark Complete"}</button>
-</Card>
         </div>
-        ))}
-        </div>
+      </div>
     </>
-  )}
-  </div>
-    </div>
-  </>
-  )
+  );
 }

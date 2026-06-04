@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { BookOpen, LayoutDashboard, LogOut, Menu, NotebookTabs, X } from "lucide-react";
+import { BookOpen, CheckCircleIcon, LayoutDashboard, LogOut, Menu, NotebookTabs, X } from "lucide-react";
 import { Link } from "react-router-dom";
+import {Toaster} from "react-hot-toast";
+import toast from "react-hot-toast";
 
 export default function Sidebar() {
   const [desktopOpen, setDesktopOpen] = useState(false);
@@ -10,16 +12,28 @@ export default function Sidebar() {
     { name: "Dashboard", icon: <LayoutDashboard size={20} />, path: "/dashboard" },
     { name: "Notes", icon: <NotebookTabs size={20} />, path: "/notes" },
     { name: "Subjects", icon: <BookOpen size={20} />, path: "/subjects" },
+    {name:"Tasks",icon:<CheckCircleIcon size={20}/>,path:"/tasks"}
   ];
+
+   const handleLogout=()=>{
+     console.log("btn clicked")
+        localStorage.removeItem("token");
+        window.location.href="/login";
+        toast.success("Logged out successfully")
+    }
 
   return (
     <>
+    <Toaster position="top-right" reverse={false}/>
       {/* mobile topbar */}
-      <div className="fixed top-0 left-0 z-40 flex w-full items-center justify-between bg-gray-800 px-4 py-3 text-white shadow-md md:hidden">
+      <div className="fixed top-0 left-0 font-semibold flex w-full items-center justify-between  mb-10 px-4 py-3  text-white  md:hidden">
+        <div className="border-2 border-gray-400 rounded-2xl hover:bg-teal-50">
+
         <button onClick={() => setMobileMenu(true)} className="rounded-md p-2 hover:bg-gray-700">
-          <Menu size={22} />
+          <Menu size={30} />
         </button>
-        <h1 className="text-lg font-bold">Study Flow</h1>
+        </div>
+        {/* <h1 className="text-lg font-bold"></h1> */}
         <div className="w-9" />
       </div>
 
@@ -60,7 +74,7 @@ export default function Sidebar() {
             </Link>
           ))}
 
-          <button className="mt-6 flex w-full items-center gap-3 rounded-xl bg-red-500 px-3 py-2 font-semibold transition hover:bg-red-600">
+          <button onClick={handleLogout} className="mt-6 flex w-full items-center gap-3 rounded-xl bg-red-500 px-3 py-2 font-semibold transition hover:bg-red-600">
             <LogOut size={20} />
             <span>Logout</span>
           </button>
@@ -94,7 +108,7 @@ export default function Sidebar() {
             ))}
           </div>
 
-          <button className="flex w-full items-center gap-3 rounded-xl bg-red-500 px-3 py-2 font-bold transition hover:bg-red-600">
+          <button onClick={handleLogout} className="flex w-full items-center gap-3 rounded-xl bg-red-500 px-3 py-2 font-bold transition hover:bg-red-600">
             <LogOut size={20} />
             {desktopOpen && <span>Logout</span>}
           </button>
