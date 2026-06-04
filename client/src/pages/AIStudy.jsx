@@ -23,7 +23,7 @@ export default function AIStudy({ user }) {
 
             if (res.data.status === 1) {
 
-                setResponse(res.data.message)
+                setResponse(res.data.response)
                 console.log(res.data.message)
 
             }

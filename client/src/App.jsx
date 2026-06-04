@@ -15,7 +15,7 @@ import Navbar from './components/Navbar'
 export default function App({user}) {
   return (
     <div>
-      <Navbar user={user}/>
+      {/* <Navbar user={user}/> */}
 <Routes>
   <Route path="/" element={<Home/>}/>
   <Route path='/dashboard' element={<Dashboard/>}/>

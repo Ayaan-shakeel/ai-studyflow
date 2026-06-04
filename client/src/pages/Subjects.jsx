@@ -67,14 +67,15 @@ try{
       <Sidebar/>
       <div className='flex-1'>
         <Navbar user={user}/>
-      
-      <h1 className='font-bold lg:text-3xl md:text-2xl sm:text-2xl text-center '>Subjects</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
+      <div className='bg-linear-to-br from-slate-900 via-blue-950 to-cyan-800 text-white min-h-screen'>
 
-        <input type="text" name='name' id='name' placeholder='Enter your subject name' value={formData.name} onChange={(e)=>setformData({...formData,name:e.target.value})}/>
+      <h1 className='font-bold lg:text-3xl md:text-2xl sm:text-2xl text-center pt-10 mb-5 '>Subjects</h1>
+      <form  className='flex justify-center items-center'  onSubmit={handleSubmit}>
+        <div className='flex justify-center items-center flex-col rounded-xl lg:w-[50%] transition-all duration-300 mb-15 p-5 bg-linear-to-br from-purple-500 to-pink-700'>
+
+        <input className="bg-white text-black outline-none w-full py-2 rounded px-2" type="text" name='name' id='name' placeholder='Enter your subject name' value={formData.name} onChange={(e)=>setformData({...formData,name:e.target.value})}/>
+        <button className='bg-linear-to-br from-blue-700 via-cyan-500 to-purple-200 hover:from-blue-800 hover:to-teal-500 text-white font-bold py-2 px-4 rounded-lg mt-6' type='submit'>add subject</button>
         </div>
-        <button type='submit'>add subject</button>
 
       </form>
       {subject.map((subject)=>(
@@ -86,6 +87,7 @@ try{
           </Card>
         </div>
       ))}
+          </div>
 
       </div>
     </div>

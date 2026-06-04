@@ -1,9 +1,20 @@
+import {model} from '../utils/gemini.js'
 
 export const generateNotes=async(req,res)=>{
     try{
-res.status(200).json({status:1,message:"This is AI Generated Note"})
+        const {message}=req.body;
+        const result=await model.generateContent({
+            contents:[{
+                role:'user',
+                parts:[{text:message}]
+            }],
+        });
+        const response=result.response.text();
+
+res.status(200).json({status:1,message:"This is AI Generated Note",response:response})
     }
     catch(error){
+        console.log(error.message)
         res.status(500).json({status:1,"message":error.message})
     }
 }
