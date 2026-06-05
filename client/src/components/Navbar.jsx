@@ -1,11 +1,22 @@
 import React from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
+import { Menu } from "lucide-react";
 
 export default function Navbar({ user }) {
+  const [mobileMenu, setMobileMenu] = useState(false)
   return (
     <nav className="w-full bg-gradient-to-r from-blue-500 via-purple-400 to-lime-500 text-white shadow-md">
+       <div className={`absolute top-0 right-0  bg-gray-700 z-10 transition-all duration-300 `}>
+            <button className='mb-5' onClick={()=>{setDesktopOpen(!desktopOpen
+      
+      
+      
+      )}}><Menu/></button>
+      </div>
       <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-3 sm:px-6 md:flex-row md:items-center md:justify-between">
+        
         
         {/* Left side */}
         <div className="flex items-center justify-between">

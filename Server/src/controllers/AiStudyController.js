@@ -1,17 +1,21 @@
 import {model} from '../utils/gemini.js'
 
-export const generateNotes=async(req,res)=>{
+export const sendMessage=async(req,res)=>{
     try{
-        const {message}=req.body;
+        console.log("--- Debug Incoming Request Body ----",req.body)
+        const {prompt}=req.body;
+        if(!prompt){
+            return res.status(400).json({status:0,message:"Backend recieved an empty or undefined message."})
+        }
         const result=await model.generateContent({
             contents:[{
                 role:'user',
-                parts:[{text:message}]
+                parts:[{text:prompt}]
             }],
         });
         const response=result.response.text();
 
-res.status(200).json({status:1,message:"This is AI Generated Note",response:response})
+res.status(200).json({status:1,message:"I am Your AI Assistant.How can I Help you?",response:response})
     }
     catch(error){
         console.log(error.message)
@@ -27,9 +31,9 @@ export const generateQuiz=async(req,res)=>{
         res.status(500).json({status:500,message:error.message})
     }
 }
-export const sendMessage=async(req,res)=>{
+export const generateNotes=async(req,res)=>{
     try{
-        res.status(200).json({status:1,message:"I am Your AI Assistant.How can I Help you?"})
+        res.status(200).json({status:1,message:"Its an AI Generated Note"})
     }
     catch(error){
         res.status(500).json({status:500,message:error.message})
