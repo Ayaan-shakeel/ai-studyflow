@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BookOpen, CheckCircleIcon, LayoutDashboard, LogOut, Menu, NotebookTabs, X } from "lucide-react";
+import { BookOpen, CheckCircleIcon, Clock10Icon, LayoutDashboard, LogOut, Menu, NotebookTabs, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import {Toaster} from "react-hot-toast";
 import toast from "react-hot-toast";
@@ -12,7 +12,8 @@ export default function Sidebar() {
     { name: "Dashboard", icon: <LayoutDashboard size={20} />, path: "/dashboard" },
     { name: "Notes", icon: <NotebookTabs size={20} />, path: "/notes" },
     { name: "Subjects", icon: <BookOpen size={20} />, path: "/subjects" },
-    {name:"Tasks",icon:<CheckCircleIcon size={20}/>,path:"/tasks"}
+    {name:"Tasks",icon:<CheckCircleIcon size={20}/>,path:"/tasks"},
+    {name:"Study Timer",icon:<Clock10Icon size={20}/>,path:"/study-timer"}
   ];
 
    const handleLogout=()=>{

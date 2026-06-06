@@ -1,135 +1,295 @@
-import React, { useState , useRef} from 'react'
-import Navbar from '../components/Navbar'
-import axios from 'axios'
-import { toast, Toaster } from 'react-hot-toast'
-import {SendHorizontal} from 'lucide-react'
+import React, { useRef, useState } from 'react';
+import Navbar from '../components/Navbar';
+import axios from 'axios';
+import { toast, Toaster } from 'react-hot-toast';
+import {
+  SendHorizontal,
+  Sparkles,
+  FileText,
+  Brain,
+  Bot,
+  Wand2,
+  ClipboardList,
+} from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export default function AIStudy({ user }) {
-    const [prompt, setPrompt] = useState("")
-    const [response, setResponse] = useState("")
-     const textareaRef = useRef(null);
+  const [prompt, setPrompt] = useState("");
+  const [response, setResponse] = useState("");
+  const [loading, setLoading] = useState(false);
+  const textareaRef = useRef(null);
 
   const handleChange = (e) => {
     setPrompt(e.target.value);
 
     const textarea = textareaRef.current;
-    textarea.style.height = "auto";
-    textarea.style.height = `${textarea.scrollHeight}px`;
+    if (textarea) {
+      textarea.style.height = "auto";
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    }
   };
-    const generateNotes = async () => {
-        try {
-            if (!prompt.trim()) {
-                return toast.error("Please enter a prompt")
-            }
 
+  const generateNotes = async () => {
+    try {
+      if (!prompt.trim()) {
+        return toast.error("Please enter a prompt");
+      }
 
-            const res = await axios.post("http://localhost:5000/api/ai-study/generate-ai-notes", {
-                prompt
-            },
-                {
-                    withCredentials: true
-                }
-            )
+      setLoading(true);
 
-            if (res.data.status === 1) {
+      const res = await axios.post(
+        "http://localhost:5000/api/ai-study/generate-ai-notes",
+        { prompt },
+        { withCredentials: true }
+      );
 
-                setResponse(res.data.response)
-                console.log(res.data.message)
-
-            }
-        } catch (error) {
-            console.log(error)
-        }
+      if (res.data.status === 1) {
+        setResponse(res.data.response);
+        console.log(res.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to generate notes");
+    } finally {
+      setLoading(false);
     }
-    const generateQuiz = async () => {
-        try {
-            if (!prompt.trim()) {
-                return toast.error("Please enter a prompt")
-            }
-            const res = await axios.post("http://localhost:5000/api/ai-study/generate-ai-quiz", {
-                prompt
-            },
-                {
-                    withCredentials: true
-                }
-            )
+  };
 
-            if (res.data.status === 1) {
+  const generateQuiz = async () => {
+    try {
+      if (!prompt.trim()) {
+        return toast.error("Please enter a prompt");
+      }
 
-                setResponse(res.data.message)
-                console.log(res.data.message)
-            }
+      setLoading(true);
 
-        } catch (error) {
-            console.log(error)
-        }
+      const res = await axios.post(
+        "http://localhost:5000/api/ai-study/generate-ai-quiz",
+        { prompt },
+        { withCredentials: true }
+      );
+
+      if (res.data.status === 1) {
+        setResponse(res.data.message);
+        console.log(res.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to generate quiz");
+    } finally {
+      setLoading(false);
     }
-    const sendMessage = async () => {
-        try {
-            if (!prompt.trim()) {
-                return toast.error("Please enter a prompt")
-            }
-            const res = await axios.post("http://localhost:5000/api/ai-study/send-ai-message", {
-                prompt
-            },
-                {
-                    withCredentials: true
-                })
-            if (res.data.status === 1) {
-                setResponse(res.data.response)
-                console.log(res.data.message)
-            }
-        } catch (error) {
-            console.log(error)
-        }
+  };
+
+  const sendMessage = async () => {
+    try {
+      if (!prompt.trim()) {
+        return toast.error("Please enter a prompt");
+      }
+
+      setLoading(true);
+
+      const res = await axios.post(
+        "http://localhost:5000/api/ai-study/send-ai-message",
+        { prompt },
+        { withCredentials: true }
+      );
+
+      if (res.data.status === 1) {
+        setResponse(res.data.response);
+        console.log(res.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to send message");
+    } finally {
+      setLoading(false);
     }
-    return (
-        <>
-            <Toaster position='top-right reverseOrder={false}' />
-            <div className="bg-linear-to-br from-slate-900 via-blue-950 to-cyan-800 text-white">
-                <div>
-                    <Navbar user={user} />
+  };
+
+  return (
+    <>
+      <Toaster position="top-right" reverseOrder={false} />
+
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 text-white">
+        <Navbar user={user} />
+
+        <main className="px-4 sm:px-6 lg:px-8 py-6 md:py-8">
+          <div className="max-w-7xl mx-auto space-y-8">
+            <motion.section
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35 }}
+              className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-5 sm:p-6 lg:p-8 shadow-[0_10px_35px_rgba(0,0,0,0.28)]"
+            >
+              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+                <div className="max-w-2xl">
+                  <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-300 mb-4">
+                    <Sparkles className="w-3.5 h-3.5" />
+                    AI powered study workspace
+                  </div>
+
+                  <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-white">
+                    AI Study Assistant
+                  </h1>
+
+                  <p className="mt-3 text-sm sm:text-base text-slate-300">
+                    Ask questions, generate notes, or create quizzes from any topic in one place.
+                  </p>
                 </div>
-                <h1 className="text-center mt-6  font-bold text-4xl">AI Study</h1>
-                <div className="flex flex-col items-center justify-center gap-5 min-h-screen">
-                    <h1 className="text-center mb-5 font-bold text-4xl">
-                        AI Study Assistant
-                    </h1>
-                  
-                <div className="mt-4 flex w-full justify-center px-3 sm:px-4">
-  <div className="relative w-full md:w-[70%] lg:w-[50%]">
-    <textarea
-      className="w-full min-h-[120px] resize-none rounded-2xl bg-white p-4 pr-16 text-base text-black outline-none shadow-md placeholder:text-gray-500 sm:text-lg"
-      placeholder="Ask Anything ..."
-      value={prompt}
-      onChange={(e) => setPrompt(e.target.value)}
-    />
-    
-    <button
-      type="button"
-      onClick={sendMessage}
-      className="absolute bottom-3 top-8 right-3 flex h-11 w-11 items-center justify-center rounded-xl  text-black shadow-lg transition-all duration-300  active:scale-95 sm:h-12 sm:w-12"
-    >
-      <SendHorizontal size={20} />
-    </button>
-  </div>
-</div>
-                    <button onClick={generateNotes} className=" mt-5 mb-5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-6 py-3 font-semibold transition-all duration-300 shadow-2xl hover:shadow-2xl  hover:shadow-indigo-500 text-xl ">Generate Notes</button>
-                    <button onClick={generateQuiz} className="mb-5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-6 py-3 font-semibold transition-all duration-300 shadow-2xl hover:shadow-2xl  hover:shadow-indigo-500 text-xl " >Generate Quiz</button>
-                        </div>
-                    <div className='flex items-center justify-center mt-5 mb-5'>
-                        <div className='bg-slate-800 rounded-xl lg:w-[50%] md:w-[70%] w-[90%] p-4  '>
-                            <h1 className='text-center font-bold text-4xl mb-6'>AI Response</h1>
-                          <p className="text-xl whitespace-pre-wrap mt-2 text-gray-300 font-light gap-4 ">
 
-                            {response || "AI response will appear Here"}
-                          </p>
-                    </div>
+                <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 min-w-[180px]">
+                  <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
+                    Assistant Status
+                  </p>
+                  <p className={`mt-2 text-lg font-semibold ${loading ? "text-amber-300" : "text-emerald-300"}`}>
+                    {loading ? "Working..." : "Ready"}
+                  </p>
+                </div>
+              </div>
+            </motion.section>
+
+            <div className="grid grid-cols-1 xl:grid-cols-5 gap-6">
+              <motion.section
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.05 }}
+                className="xl:col-span-3 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-5 sm:p-6 lg:p-8 shadow-[0_10px_35px_rgba(0,0,0,0.24)]"
+              >
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="rounded-2xl border border-cyan-400/20 bg-cyan-500/10 p-3">
+                    <Bot className="w-5 h-5 text-cyan-300" />
+                  </div>
+                  <div>
+                    <h2 className="text-lg sm:text-xl font-semibold text-white">
+                      Ask anything
+                    </h2>
+                    <p className="text-sm text-slate-300">
+                      Enter a topic, doubt, or study request below.
+                    </p>
+                  </div>
                 </div>
 
+                <div className="relative">
+                  <textarea
+                    ref={textareaRef}
+                    className="w-full min-h-[140px] max-h-[320px] resize-none overflow-y-auto rounded-3xl border border-white/10 bg-slate-950/60 p-4 pr-16 text-base text-white outline-none shadow-md placeholder:text-slate-400 focus:ring-2 focus:ring-cyan-500/70 sm:text-lg"
+                    placeholder="Ask anything... for example: Explain the human heart in simple notes, generate a quiz on JavaScript closures, or summarize photosynthesis."
+                    value={prompt}
+                    onChange={handleChange}
+                  />
 
+                  <button
+                    type="button"
+                    onClick={sendMessage}
+                    disabled={loading}
+                    className="absolute bottom-4 right-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-500 text-slate-950 shadow-lg shadow-cyan-950/30 transition-all duration-300 hover:bg-cyan-400 active:scale-[0.96] disabled:opacity-60"
+                    aria-label="Send message"
+                  >
+                    <SendHorizontal size={18} />
+                  </button>
+                </div>
 
+                <div className="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <button
+                    onClick={sendMessage}
+                    disabled={loading}
+                    className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-2xl bg-cyan-500 px-4 py-3 font-semibold text-slate-950 hover:bg-cyan-400 active:scale-[0.98] transition-all duration-300 shadow-lg shadow-cyan-950/30 disabled:opacity-60"
+                  >
+                    <Wand2 className="w-4 h-4" />
+                    Chat
+                  </button>
+
+                  <button
+                    onClick={generateNotes}
+                    disabled={loading}
+                    className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-2xl bg-blue-500 px-4 py-3 font-semibold text-white hover:bg-blue-400 active:scale-[0.98] transition-all duration-300 shadow-lg shadow-blue-950/30 disabled:opacity-60"
+                  >
+                    <FileText className="w-4 h-4" />
+                    Generate Notes
+                  </button>
+
+                  <button
+                    onClick={generateQuiz}
+                    disabled={loading}
+                    className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-2xl bg-violet-500 px-4 py-3 font-semibold text-white hover:bg-violet-400 active:scale-[0.98] transition-all duration-300 shadow-lg shadow-violet-950/30 disabled:opacity-60"
+                  >
+                    <ClipboardList className="w-4 h-4" />
+                    Generate Quiz
+                  </button>
+                </div>
+              </motion.section>
+
+              <motion.aside
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.45, delay: 0.08 }}
+                className="xl:col-span-2 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-5 sm:p-6 shadow-[0_10px_35px_rgba(0,0,0,0.22)]"
+              >
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="rounded-2xl border border-emerald-400/20 bg-emerald-500/10 p-3">
+                    <Brain className="w-5 h-5 text-emerald-300" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-white">Quick tips</h3>
+                    <p className="text-sm text-slate-300">
+                      Better prompts give better answers.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-4 text-sm text-slate-300">
+                  <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                    Ask for a format like “short notes,” “bullet summary,” or “MCQ quiz.”
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                    Mention class level or difficulty, for example “for 12th standard” or “beginner level.”
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                    For coding topics, ask for examples, edge cases, or interview-style questions.
+                  </div>
+                </div>
+              </motion.aside>
             </div>
-        </>
-    )
+
+            <motion.section
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-5 sm:p-6 lg:p-8 shadow-[0_10px_35px_rgba(0,0,0,0.24)]"
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <div className="rounded-2xl border border-amber-400/20 bg-amber-500/10 p-3">
+                  <FileText className="w-5 h-5 text-amber-300" />
+                </div>
+                <div>
+                  <h2 className="text-lg sm:text-xl font-semibold text-white">
+                    AI Response
+                  </h2>
+                  <p className="text-sm text-slate-300">
+                    Your generated result will appear here.
+                  </p>
+                </div>
+              </div>
+
+              <div className="rounded-3xl border border-white/10 bg-slate-950/50 p-4 sm:p-5 min-h-[260px] max-h-[520px] overflow-y-auto">
+                {loading ? (
+                  <div className="space-y-3 animate-pulse">
+                    <div className="h-4 w-3/4 rounded bg-white/10" />
+                    <div className="h-4 w-full rounded bg-white/10" />
+                    <div className="h-4 w-5/6 rounded bg-white/10" />
+                    <div className="h-4 w-2/3 rounded bg-white/10" />
+                  </div>
+                ) : (
+                  <p className="whitespace-pre-wrap break-words text-sm sm:text-base leading-7 text-slate-200">
+                    {response || "AI response will appear here."}
+                  </p>
+                )}
+              </div>
+            </motion.section>
+          </div>
+        </main>
+      </div>
+    </>
+  );
 }
