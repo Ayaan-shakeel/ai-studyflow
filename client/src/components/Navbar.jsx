@@ -1,44 +1,91 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
-import { Menu } from "lucide-react";
+import { Menu, X, Home, UserCircle2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Navbar({ user, darkMode, setDarkMode }) {
-  const [mobileMenu, setMobileMenu] = useState(false)
+  const [mobileMenu, setMobileMenu] = useState(false);
+
   return (
-    <nav className="w-full bg-linear-to-r from-blue-500 via-purple-400 to-lime-500 text-white shadow-md">
-       
-      <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-3 sm:px-6 md:flex-row md:items-center md:justify-between">
-        
-        
-        {/* Left side */}
-        <div className="flex items-center ml-8 justify-between">
-          <div className="flex items-center gap-2 ml-8 sm:gap-3">
-            <img
-              src={logo}
-              alt="Study Flow logo"
-              className="h-16 w-16  rounded-full object-cover sm:h-11 sm:w-11"
-            />
-            <h1 className="text-lg font-bold tracking-wide sm:text-xl">
-              Study Flow
-            </h1>
-          </div>
-        </div>
+    <nav className="sticky top-0 z-50 w-full border-b border-white/10 bg-slate-950/80 text-white backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.18)]">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-20 items-center justify-between gap-4">
+          <div className="flex min-w-0 items-center gap-3">
+            <div className="shrink-0 rounded-2xl border border-white/10 bg-white/5 p-1.5 shadow-sm">
+              <img
+                src={logo}
+                alt="Study Flow logo"
+                className="h-10 w-10 rounded-xl object-cover sm:h-11 sm:w-11"
+              />
+            </div>
 
-        {/* Right side */}
-        <div className="flex flex-col gap-2 text-sm font-semibold sm:text-base md:flex-row md:items-center md:gap-6">
-          <Link
-            to="/"
-            className="rounded-md px-3 py-2 transition hover:bg-white/15"
+            <div className="min-w-0">
+              <h1 className="truncate text-lg sm:text-xl font-bold tracking-tight text-white">
+                Study Flow
+              </h1>
+              <p className="hidden sm:block text-xs text-slate-400">
+                Smart study workspace
+              </p>
+            </div>
+          </div>
+
+          <div className="hidden md:flex items-center gap-3 lg:gap-4">
+            <Link
+              to="/"
+              className="inline-flex min-h-[44px] items-center gap-2 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-200 transition-all duration-300 hover:bg-white/10 hover:text-white"
+            >
+              <Home className="h-4 w-4" />
+              Home
+            </Link>
+
+            <div className="inline-flex min-h-[44px] items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-medium text-slate-200">
+              <UserCircle2 className="h-4 w-4 text-cyan-300" />
+              <span className="max-w-[140px] truncate">
+                {user?.username ? user.username : "Guest"}
+              </span>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setMobileMenu(!mobileMenu)}
+            className="md:hidden inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-slate-200 transition-all duration-300 hover:bg-white/10 active:scale-[0.96]"
+            aria-label="Toggle menu"
           >
-            Home
-          </Link>
-
-          <div className="rounded-md bg-white/10 px-3 py-2 text-center md:text-left">
-            {user?.username ? user.username : "Guest"}
-          </div>
+            {mobileMenu ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
         </div>
+
+        <AnimatePresence>
+          {mobileMenu && (
+            <motion.div
+              initial={{ opacity: 0, y: -12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.22 }}
+              className="md:hidden pb-4"
+            >
+              <div className="rounded-3xl border border-white/10 bg-white/5 p-3 shadow-[0_8px_30px_rgba(0,0,0,0.16)] backdrop-blur-xl">
+                <div className="flex flex-col gap-2">
+                  <Link
+                    to="/"
+                    onClick={() => setMobileMenu(false)}
+                    className="inline-flex min-h-[44px] items-center gap-2 rounded-2xl px-4 py-3 text-sm font-medium text-slate-200 transition-all duration-300 hover:bg-white/10"
+                  >
+                    <Home className="h-4 w-4" />
+                    Home
+                  </Link>
+
+                  <div className="inline-flex min-h-[44px] items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-slate-200">
+                    <UserCircle2 className="h-4 w-4 text-cyan-300" />
+                    <span>{user?.username ? user.username : "Guest"}</span>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </nav>
   );
