@@ -13,11 +13,13 @@ import { Link, useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import toast from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTheme } from "./ThemeContext";
 
 export default function Sidebar() {
   const [desktopOpen, setDesktopOpen] = useState(false);
   const [mobileMenu, setMobileMenu] = useState(false);
   const location = useLocation();
+  const { darkMode } = useTheme();
 
   const navLinks = [
     { name: "Dashboard", icon: <LayoutDashboard size={20} />, path: "/dashboard" },
@@ -34,12 +36,31 @@ export default function Sidebar() {
     toast.success("Logged out successfully");
   };
 
+  const sidebarShell = darkMode
+    ? "border-slate-200 bg-white text-slate-900 shadow-[0_0_30px_rgba(15,23,42,0.08)]"
+    : "border-white/10 bg-slate-950/95 text-white shadow-[0_0_30px_rgba(0,0,0,0.18)]";
+
+  const mobileTrigger = darkMode
+    ? "border-slate-200 bg-white/95 text-slate-900 hover:bg-slate-100"
+    : "border-white/10 bg-slate-950/90 text-white hover:bg-slate-900";
+
+  const iconButton = darkMode
+    ? "border-slate-200 bg-slate-100 hover:bg-slate-200 text-slate-800"
+    : "border-white/10 bg-white/5 hover:bg-white/10 text-white";
+
+  const headingMuted = darkMode ? "text-slate-500" : "text-slate-400";
+
+  const logoutBtn =
+    "bg-red-500 text-white hover:bg-red-600 shadow-lg shadow-red-950/30";
+
   const linkClasses = (path, isDesktop = false) => {
     const active = location.pathname === path;
 
     return `group flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-semibold transition-all duration-300 ${
       active
         ? "bg-cyan-500 text-slate-950 shadow-lg shadow-cyan-950/20"
+        : darkMode
+        ? "text-slate-700 hover:bg-slate-100 hover:text-slate-900"
         : "text-slate-200 hover:bg-white/10 hover:text-white"
     } ${isDesktop && !desktopOpen ? "justify-center px-2" : ""}`;
   };
@@ -49,15 +70,15 @@ export default function Sidebar() {
       <Toaster position="top-right" reverseOrder={false} />
 
       {/* Mobile trigger */}
-<div className="fixed right-5 top-4 z-[80] md:hidden">
-  <button
-    onClick={() => setMobileMenu(true)}
-    className="inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-slate-950/90 text-white shadow-lg backdrop-blur-xl transition-all duration-300 hover:bg-slate-900 active:scale-[0.96]"
-    aria-label="Open menu"
-  >
-    <Menu size={22} />
-  </button>
-</div>
+      <div className="fixed left-4 top-4 z-[80] md:hidden">
+        <button
+          onClick={() => setMobileMenu(true)}
+          className={`inline-flex h-12 w-12 items-center justify-center rounded-2xl border shadow-lg backdrop-blur-xl transition-all duration-300 active:scale-[0.96] ${mobileTrigger}`}
+          aria-label="Open menu"
+        >
+          <Menu size={22} />
+        </button>
+      </div>
 
       {/* Mobile overlay */}
       <AnimatePresence>
@@ -68,7 +89,7 @@ export default function Sidebar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setMobileMenu(false)}
-              className="fixed inset-0 z-40 bg-black/50 backdrop-blur-[2px] md:hidden"
+              className="fixed inset-0 z-[70] bg-black/50 backdrop-blur-[2px] md:hidden"
             />
 
             <motion.aside
@@ -76,17 +97,17 @@ export default function Sidebar() {
               animate={{ x: 0 }}
               exit={{ x: -320 }}
               transition={{ duration: 0.28, ease: "easeOut" }}
-              className="fixed left-0 top-0 z-50 h-screen w-72 border-r border-white/10 bg-slate-950/95 p-5 text-white shadow-2xl backdrop-blur-xl md:hidden"
+              className={`fixed left-0 top-0 z-[90] h-screen w-72 border-r p-5 backdrop-blur-xl md:hidden ${sidebarShell}`}
             >
               <div className="mb-8 flex items-center justify-between">
                 <div>
                   <h2 className="text-xl font-bold tracking-tight">Study Flow</h2>
-                  <p className="text-sm text-slate-400">Navigation menu</p>
+                  <p className={`text-sm ${headingMuted}`}>Navigation menu</p>
                 </div>
 
                 <button
                   onClick={() => setMobileMenu(false)}
-                  className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/5 transition-all duration-300 hover:bg-white/10 active:scale-[0.96]"
+                  className={`inline-flex h-11 w-11 items-center justify-center rounded-2xl border transition-all duration-300 active:scale-[0.96] ${iconButton}`}
                   aria-label="Close menu"
                 >
                   <X size={20} />
@@ -110,7 +131,7 @@ export default function Sidebar() {
 
                 <button
                   onClick={handleLogout}
-                  className="mt-6 inline-flex min-h-[48px] w-full items-center gap-3 rounded-2xl bg-red-500 px-4 py-3 font-semibold text-white transition-all duration-300 hover:bg-red-600 active:scale-[0.98] shadow-lg shadow-red-950/30"
+                  className={`mt-6 inline-flex min-h-[48px] w-full items-center gap-3 rounded-2xl px-4 py-3 font-semibold transition-all duration-300 active:scale-[0.98] ${logoutBtn}`}
                 >
                   <LogOut size={18} />
                   <span>Logout</span>
@@ -123,21 +144,21 @@ export default function Sidebar() {
 
       {/* Desktop sidebar */}
       <aside
-        className={`hidden min-h-screen border-r border-white/10 bg-slate-950/95 text-white shadow-[0_0_30px_rgba(0,0,0,0.18)] backdrop-blur-xl transition-all duration-300 md:flex md:flex-col ${
+        className={`hidden min-h-screen border-r backdrop-blur-xl transition-all duration-300 md:flex md:flex-col ${
           desktopOpen ? "w-72" : "w-24"
-        }`}
+        } ${sidebarShell}`}
       >
         <div className="flex h-full flex-col px-4 py-5">
           <div className={`mb-8 flex items-center ${desktopOpen ? "justify-between" : "justify-center"}`}>
             {desktopOpen && (
               <div className="min-w-0">
                 <h2 className="truncate text-lg font-bold tracking-tight">Study Flow</h2>
-                <p className="text-xs text-slate-400">Productivity panel</p>
+                <p className={`text-xs ${headingMuted}`}>Productivity panel</p>
               </div>
             )}
 
             <button
-              className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/5 transition-all duration-300 hover:bg-white/10 active:scale-[0.96]"
+              className={`inline-flex h-11 w-11 items-center justify-center rounded-2xl border transition-all duration-300 active:scale-[0.96] ${iconButton}`}
               onClick={() => setDesktopOpen(!desktopOpen)}
               aria-label="Toggle desktop sidebar"
             >
@@ -162,9 +183,9 @@ export default function Sidebar() {
 
             <button
               onClick={handleLogout}
-              className={`inline-flex min-h-[48px] items-center gap-3 rounded-2xl bg-red-500 px-4 py-3 font-semibold text-white transition-all duration-300 hover:bg-red-600 active:scale-[0.98] shadow-lg shadow-red-950/30 ${
+              className={`inline-flex min-h-[48px] items-center gap-3 rounded-2xl px-4 py-3 font-semibold transition-all duration-300 active:scale-[0.98] ${
                 desktopOpen ? "justify-start" : "justify-center px-2"
-              }`}
+              } ${logoutBtn}`}
               title={!desktopOpen ? "Logout" : ""}
             >
               <LogOut size={18} />

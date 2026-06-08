@@ -19,13 +19,15 @@ import {
 } from 'lucide-react';
 import PageLoader from '../components/PageLoader';
 import { motion } from 'framer-motion';
+import { useTheme } from '../components/ThemeContext';
 
 export default function Dashboard() {
   const [user, setuser] = useState(null);
   const [notes, setnotes] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [tasks, setTasks] = useState([]);
-  const [darkMode, setDarkMode] = useState(true);
+  // const [darkMode, setDarkMode] = useState(true);
+  const {darkMode,setDarkMode}=useTheme();
 
   const navigate = useNavigate();
 

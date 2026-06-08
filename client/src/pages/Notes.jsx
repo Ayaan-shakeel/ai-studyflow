@@ -2,12 +2,10 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import Navbar from '../components/Navbar';
-import Card from '../components/Card';
-import NotesCard from '../components/NotesCard';
 import { BookOpen, Search, NotebookPen, Trash2, Filter, FileText } from 'lucide-react';
 import { Toaster, toast } from 'react-hot-toast';
 import { motion } from 'framer-motion';
-
+import { useTheme } from '../components/ThemeContext';
 export default function Notes({ children }) {
   const [user, setuser] = useState(null);
   const [notes, setnotes] = useState([]);
@@ -19,6 +17,44 @@ export default function Notes({ children }) {
   const [subjects, setSubjects] = useState([]);
   const [search, setSearch] = useState('');
   const [subjectFilter, setSubjectFilter] = useState("all");
+
+  const { darkMode } = useTheme();
+
+  const pageClasses = darkMode
+    ? "min-h-screen bg-slate-50 text-slate-900"
+    : "min-h-screen bg-gradient-to-br from-slate-800 via-blue-900 to-indigo-950 text-white";
+
+  const panelClasses = darkMode
+    ? "rounded-3xl bg-white border border-slate-200 shadow-sm"
+    : "rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-xl";
+
+  const inputClasses = darkMode
+    ? "w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-blue-500/40"
+    : "w-full rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-white placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-blue-500/70";
+
+  const selectClasses = darkMode
+    ? "w-full appearance-none rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none focus:ring-2 focus:ring-blue-500/40"
+    : "w-full appearance-none rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-white outline-none focus:ring-2 focus:ring-blue-500/70";
+
+  const textareaClasses = darkMode
+    ? "w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-blue-500/40 resize-none"
+    : "w-full rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-white placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-blue-500/70 resize-none";
+
+  const labelClasses = darkMode
+    ? "block text-sm font-medium text-slate-700 mb-2"
+    : "block text-sm font-medium text-slate-200 mb-2";
+
+  const titleClasses = darkMode ? "text-slate-900" : "text-white";
+  const mutedText = darkMode ? "text-slate-600" : "text-slate-300";
+  const softText = darkMode ? "text-slate-500" : "text-slate-400";
+
+  const noteCardClasses = darkMode
+    ? "h-full rounded-3xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition-all duration-300"
+    : "h-full rounded-3xl border border-white/10 bg-gradient-to-b from-white/10 to-white/5 backdrop-blur-md p-5 shadow-lg hover:shadow-blue-950/20 hover:border-blue-400/20 transition-all duration-300";
+
+  const noteContentBox = darkMode
+    ? "rounded-2xl bg-slate-50 border border-slate-200 p-4"
+    : "rounded-2xl bg-black/20 border border-white/5 p-4";
 
   useEffect(() => {
     const fetchNotes = async () => {
@@ -109,7 +145,7 @@ export default function Notes({ children }) {
     <>
       <Toaster position="top-right" reverseOrder={false} />
 
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-white">
+      <div className={pageClasses}>
         <div className="flex min-h-screen">
           <Sidebar />
 
@@ -123,14 +159,14 @@ export default function Notes({ children }) {
                 transition={{ duration: 0.35 }}
                 className="space-y-8"
               >
-                <section className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl p-4 sm:p-6 md:p-8">
+                <section className={`${panelClasses} p-4 sm:p-6 md:p-8`}>
                   <div className="flex items-center gap-3 mb-6">
-                    <div className="p-3 rounded-2xl bg-blue-500/15 border border-blue-400/20">
-                      <NotebookPen className="w-6 h-6 text-blue-300" />
+                    <div className={`p-3 rounded-2xl ${darkMode ? "bg-blue-50 border border-blue-200" : "bg-blue-500/15 border border-blue-400/20"}`}>
+                      <NotebookPen className={`w-6 h-6 ${darkMode ? "text-blue-600" : "text-blue-300"}`} />
                     </div>
                     <div>
-                      <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Notes</h1>
-                      <p className="text-sm md:text-base text-slate-300">
+                      <h1 className={`text-2xl md:text-3xl font-bold tracking-tight ${titleClasses}`}>Notes</h1>
+                      <p className={`text-sm md:text-base ${mutedText}`}>
                         Create, organize, and filter your study notes easily.
                       </p>
                     </div>
@@ -138,11 +174,11 @@ export default function Notes({ children }) {
 
                   <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-4">
                     <div className="lg:col-span-4">
-                      <label htmlFor="title" className="block text-sm font-medium text-slate-200 mb-2">
+                      <label htmlFor="title" className={labelClasses}>
                         Title
                       </label>
                       <input
-                        className="w-full rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-white placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-blue-500/70"
+                        className={inputClasses}
                         type="text"
                         name="title"
                         id="title"
@@ -153,11 +189,11 @@ export default function Notes({ children }) {
                     </div>
 
                     <div className="lg:col-span-3">
-                      <label htmlFor="subjectId" className="block text-sm font-medium text-slate-200 mb-2">
+                      <label htmlFor="subjectId" className={labelClasses}>
                         Subject
                       </label>
                       <select
-                        className="w-full rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-white outline-none focus:ring-2 focus:ring-blue-500/70"
+                        className={selectClasses}
                         name="subjectId"
                         id="subjectId"
                         value={formData.subjectId}
@@ -173,11 +209,11 @@ export default function Notes({ children }) {
                     </div>
 
                     <div className="lg:col-span-5">
-                      <label htmlFor="content" className="block text-sm font-medium text-slate-200 mb-2">
+                      <label htmlFor="content" className={labelClasses}>
                         Content
                       </label>
                       <textarea
-                        className="w-full rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-white placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-blue-500/70 resize-none"
+                        className={textareaClasses}
                         name="content"
                         id="content"
                         placeholder="Enter the content"
@@ -189,7 +225,7 @@ export default function Notes({ children }) {
 
                     <div className="lg:col-span-12">
                       <button
-                        className="inline-flex items-center justify-center gap-2 rounded-2xl bg-blue-600 hover:bg-blue-500 active:scale-[0.98] transition-all duration-300 px-6 py-3 font-semibold shadow-lg shadow-blue-950/40"
+                        className="inline-flex items-center justify-center gap-2 rounded-2xl bg-blue-600 hover:bg-blue-500 active:scale-[0.98] transition-all duration-300 px-6 py-3 font-semibold text-white shadow-lg shadow-blue-950/20"
                         type="submit"
                       >
                         <FileText className="w-4 h-4" />
@@ -199,12 +235,12 @@ export default function Notes({ children }) {
                   </form>
                 </section>
 
-                <section className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-xl p-4 sm:p-6">
+                <section className={`${panelClasses} p-4 sm:p-6`}>
                   <div className="flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
                     <div className="relative w-full md:max-w-md">
-                      <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
+                      <Search className={`absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 ${softText}`} />
                       <input
-                        className="w-full rounded-2xl border border-white/10 bg-white/10 pl-11 pr-4 py-3 text-white placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-blue-500/70"
+                        className={`${inputClasses} pl-11 pr-4`}
                         type="search"
                         placeholder="Search notes..."
                         name="search"
@@ -215,9 +251,9 @@ export default function Notes({ children }) {
                     </div>
 
                     <div className="relative w-full md:w-64">
-                      <Filter className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
+                      <Filter className={`absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 ${softText}`} />
                       <select
-                        className="w-full appearance-none rounded-2xl border border-white/10 bg-white/10 pl-11 pr-4 py-3 text-white outline-none focus:ring-2 focus:ring-blue-500/70"
+                        className={`${selectClasses} pl-11 pr-4`}
                         name="subjectId"
                         id="subjectFilter"
                         value={subjectFilter}
@@ -236,19 +272,19 @@ export default function Notes({ children }) {
 
                 <section>
                   {filteredNotes.length === 0 ? (
-                    <div className="rounded-3xl border border-dashed border-white/15 bg-white/5 p-10 text-center">
-                      <h2 className="text-2xl font-bold text-white">No Notes Found</h2>
-                      <p className="text-slate-300 mt-2">
+                    <div className={`${panelClasses} p-10 text-center border-dashed`}>
+                      <h2 className={`text-2xl font-bold ${titleClasses}`}>No Notes Found</h2>
+                      <p className={`${mutedText} mt-2`}>
                         Start by creating a note or adjust your search and subject filter.
                       </p>
                     </div>
                   ) : (
                     <>
                       <div className="flex items-center justify-between mb-5">
-                        <h2 className="text-2xl md:text-3xl font-bold text-lime-300">
+                        <h2 className={`text-2xl md:text-3xl font-bold ${darkMode ? "text-slate-900" : "text-lime-300"}`}>
                           Your Notes
                         </h2>
-                        <span className="text-sm text-slate-300">
+                        <span className={`text-sm ${mutedText}`}>
                           {filteredNotes.length} note{filteredNotes.length > 1 ? "s" : ""}
                         </span>
                       </div>
@@ -262,31 +298,31 @@ export default function Notes({ children }) {
                             transition={{ duration: 0.3, delay: index * 0.05 }}
                             className="h-full"
                           >
-                            <div className="h-full rounded-3xl border border-white/10 bg-gradient-to-b from-white/10 to-white/5 backdrop-blur-md p-5 shadow-lg hover:shadow-blue-950/20 hover:border-blue-400/20 transition-all duration-300">
+                            <div className={noteCardClasses}>
                               <div className="flex items-start justify-between gap-3 mb-4">
                                 <div className="flex items-center gap-2 min-w-0">
-                                  <div className="p-2 rounded-xl bg-indigo-500/15 border border-indigo-400/20 shrink-0">
-                                    <BookOpen className="w-4 h-4 text-indigo-300" />
+                                  <div className={`p-2 rounded-xl shrink-0 ${darkMode ? "bg-indigo-50 border border-indigo-200" : "bg-indigo-500/15 border border-indigo-400/20"}`}>
+                                    <BookOpen className={`w-4 h-4 ${darkMode ? "text-indigo-600" : "text-indigo-300"}`} />
                                   </div>
-                                  <span className="text-sm font-medium text-slate-300 truncate">
+                                  <span className={`text-sm font-medium truncate ${mutedText}`}>
                                     {note.subjectId?.name || "No Subject"}
                                   </span>
                                 </div>
 
                                 <button
                                   onClick={() => deleteNote(note._id)}
-                                  className="shrink-0 inline-flex items-center justify-center rounded-xl border border-red-400/20 bg-red-500/10 p-2 text-red-300 hover:bg-red-500/20 transition-colors"
+                                  className="shrink-0 inline-flex items-center justify-center rounded-xl border border-red-400/20 bg-red-500/10 p-2 text-red-500 hover:bg-red-500/20 transition-colors"
                                 >
                                   <Trash2 className="w-4 h-4" />
                                 </button>
                               </div>
 
-                              <h3 className="text-lg font-semibold text-white line-clamp-2 break-words mb-3">
+                              <h3 className={`text-lg font-semibold line-clamp-2 break-words mb-3 ${titleClasses}`}>
                                 {note.title}
                               </h3>
 
-                              <div className="rounded-2xl bg-black/20 border border-white/5 p-4">
-                                <p className="text-sm text-slate-200 whitespace-pre-wrap break-words max-h-40 overflow-y-auto pr-2 custom-scrollbar">
+                              <div className={noteContentBox}>
+                                <p className={`text-sm whitespace-pre-wrap break-words max-h-40 overflow-y-auto pr-2 custom-scrollbar ${darkMode ? "text-slate-700" : "text-slate-200"}`}>
                                   {note.content}
                                 </p>
                               </div>
