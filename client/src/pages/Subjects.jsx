@@ -23,7 +23,7 @@ export default function Subjects({ user }) {
 
   const pageClasses = darkMode
     ? "min-h-screen bg-slate-50 text-slate-900"
-    : "min-h-screen bg-gradient-to-br from-slate-800 via-blue-900 to-indigo-950 text-white";
+    : "min-h-screen bg-linear-to-br from-slate-950 via-blue-950 to-slate-900 text-white";
 
   const panelClasses = darkMode
     ? "rounded-3xl border border-slate-200 bg-white shadow-sm"

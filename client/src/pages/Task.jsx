@@ -113,7 +113,7 @@ export default function Task({ user }) {
 
   const pageClasses = darkMode
     ? "min-h-screen bg-slate-50 text-slate-900"
-    : "min-h-screen bg-slate-950 text-white";
+    : "min-h-screen bg-linear-to-br from-slate-950 via-blue-950 to-slate-900 text-white";
 
   const panelClasses = darkMode
     ? "border border-slate-200 bg-white shadow-[0_10px_35px_rgba(15,23,42,0.08)]"

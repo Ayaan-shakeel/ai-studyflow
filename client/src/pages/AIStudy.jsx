@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../components/ThemeContext';
+import Sidebar from '../components/Sidebar';
 
 export default function AIStudy({ user }) {
   const [prompt, setPrompt] = useState("");
@@ -112,7 +113,7 @@ export default function AIStudy({ user }) {
   // REVERSED TO MATCH YOUR APP LOGIC
   const pageClasses = darkMode
     ? "min-h-screen bg-slate-50 text-slate-900"
-    : "min-h-screen bg-slate-950 text-white";
+    : "min-h-screen bg-linear-to-br from-slate-950 via-blue-950 to-slate-900 text-white";
 
   const panelClasses = darkMode
     ? "border border-slate-200 bg-white shadow-sm"
@@ -135,6 +136,9 @@ export default function AIStudy({ user }) {
       <Toaster position="top-right" reverseOrder={false} />
 
       <div className={pageClasses}>
+        <div className="flex">
+<Sidebar/>
+        <div className="flex-1">
         <Navbar user={user} />
 
         <main className="px-4 sm:px-6 lg:px-8 py-6 md:py-8">
@@ -333,6 +337,8 @@ export default function AIStudy({ user }) {
           </div>
         </main>
       </div>
+        </div>
+        </div>
     </>
   );
 }

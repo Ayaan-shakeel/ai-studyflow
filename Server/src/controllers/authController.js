@@ -80,3 +80,18 @@ export const getProfile = async (req, res) => {
     }
 
 }
+
+export const handleLogout=async(req,res)=>{
+    try{
+        res.clearCookie("token",{
+            httpOnly:true,
+            secure:false,
+            sameSite:"strict",
+        })
+        res.status(200).json({status:1,message:"Logged out Successfully"})
+    }
+    catch(error){
+        console.log(error);
+        res.status(500).json({status:0,message:error.message})
+    }
+}

@@ -44,6 +44,7 @@ const handleSubmit= async(e)=>{
     <input className='border w-full p-3 rounded-lg mb-4 ' type="email" name="email" id="email" placeholder='Enter Your email' value={formData.email} onChange={handleChange} />
     <input className='border w-full p-3 rounded-lg mb-4 ' type="password" name="password" id="password" placeholder='Enter Your password' value={formData.password} onChange={handleChange} />
     <button className='bg-blue-500 text-white py-2 px-4 w-full cursor-pointer rounded-lg hover:bg-blue-600' type='submit'>Login</button>
+   <p onClick={()=>navigate("/signup")} className='text-blue-500 hover:text-blue-700 font-bold text-xl mt-5 cursor-pointer'>Create a new Account </p>  
    </form>
     </div>
     </AuthCard>

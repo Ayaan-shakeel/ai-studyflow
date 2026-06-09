@@ -23,7 +23,7 @@ export default function Home({ user }) {
   // darkMode === false => DARK UI
   const pageClasses = darkMode
     ? "min-h-screen bg-slate-50 text-slate-900"
-    : "min-h-screen bg-slate-950 text-white";
+    : "min-h-screen bg-linear-to-br from-slate-950 via-blue-950 to-slate-900 text-white";
 
   const panelClasses = darkMode
     ? "bg-white border border-slate-200 shadow-sm"

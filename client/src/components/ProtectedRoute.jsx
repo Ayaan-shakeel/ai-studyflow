@@ -1,12 +1,19 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import {useState,useEffect} from 'react'
 
 export default function ProtectedRoute({children}) {
-    const navigate=useNavigate();
-    const token=localStorage.getItem("token");
-    if(!token){
-        navigate("/login");
-    }
-  return 
-  children;
+const [authenticated, setAuthenticated] = useState(false)
+useEffect(()=>{
+axios.get("http://localhost:5000/api/auth/profile",{
+  withCredentials:true
+}).then(()=>{
+  setAuthenticated(true)
+}).catch(()=>{
+  setAuthenticated(false)
+})
+},[])
+return authenticated ? children : <Navigate to="/login"/>
 }
+

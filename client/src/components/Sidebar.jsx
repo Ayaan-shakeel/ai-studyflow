@@ -8,12 +8,14 @@ import {
   Menu,
   NotebookTabs,
   X,
+  Sparkles,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import toast from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "./ThemeContext";
+import axios from "axios";
 
 export default function Sidebar() {
   const [desktopOpen, setDesktopOpen] = useState(false);
@@ -26,14 +28,24 @@ export default function Sidebar() {
     { name: "Notes", icon: <NotebookTabs size={20} />, path: "/notes" },
     { name: "Subjects", icon: <BookOpen size={20} />, path: "/subjects" },
     { name: "Tasks", icon: <CheckCircleIcon size={20} />, path: "/tasks" },
-    { name: "Study Timer", icon: <Clock10Icon size={20} />, path: "/study-timer" }
+    { name: "Study Timer", icon: <Clock10Icon size={20} />, path: "/study-timer" },
+    { name: "AI Study Assitant ", icon: <Sparkles  size={20} />, path: "/ai-study" }
   ];
 
-  const handleLogout = () => {
-    console.log("btn clicked");
+  const handleLogout = async() => {
+    try{
+const res=await axios.post("http://localhost:5000/api/auth/logout",{
+  withCredentials:true
+}
+)
+
     localStorage.removeItem("token");
-    window.location.href = "/login";
     toast.success("Logged out successfully");
+    navigate("/login")
+}
+    catch(error){
+      console.log(error.message)
+    }
   };
 
   const sidebarShell = darkMode
