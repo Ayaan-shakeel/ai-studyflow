@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 
 export const AuthCard = ({ children }) => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 px-4 py-8 sm:px-6 lg:px-8 flex items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-900 to-indigo-950 px-4 py-8 sm:px-6 lg:px-8 flex items-center justify-center">
       <div className="w-full max-w-md">
         <motion.div
           initial={{ opacity: 0, y: 24, scale: 0.97 }}

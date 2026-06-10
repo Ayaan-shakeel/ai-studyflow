@@ -33,7 +33,19 @@ export const generateQuiz=async(req,res)=>{
 }
 export const generateNotes=async(req,res)=>{
     try{
-        res.status(200).json({status:1,message:"Its an AI Generated Note"})
+        const {prompt}=req.body;
+        if(!prompt){
+            return res.status(400).json({status:0,message:"Backend recieved an empty or undefined message."})
+        }
+        const aiPrompt=`Create detailed study notes on ${prompt} Format : #Introduction #important Concepts #Key Points #Summary Make it Student friendly`;
+        const result=await model.generateContent({
+            contents:[{
+                role:'user',
+                parts:[{text:aiPrompt}]
+            }],
+        });
+        const response=result.response.text();
+        res.status(200).json({status:1,message:"Its an AI Generated Note",response:response})
     }
     catch(error){
         res.status(500).json({status:500,message:error.message})
