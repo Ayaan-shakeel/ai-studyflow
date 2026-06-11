@@ -1,4 +1,5 @@
 import {model} from '../utils/gemini.js'
+import Note from '../models/NotesModel.js';
 
 export const sendMessage=async(req,res)=>{
     try{
@@ -50,4 +51,27 @@ export const generateNotes=async(req,res)=>{
     catch(error){
         res.status(500).json({status:500,message:error.message})
     }
+}
+export const saveAiNote=async(req,res)=>{
+    try{
+
+    const{title,content,subjectId}=req.body;
+    if(!title || !content || !subjectId){
+        return res.status(400).json({status:0,message:"Title, Content and Subject fields are required."})
+
+        }
+        const aiNote= await Note.create({
+            title,
+            content,
+            subjectId,
+            userId:req.user._id,
+            isAiGenerated:true
+        })
+        await aiNote.populate("subjectId","name")
+        res.status(201).json({status:1,message:"AI Note Created Successfully",aiNote:aiNote})
+       }
+       catch(error){
+        console.log(error.message)
+           res.status(500).json({status:500,message:error.message})
+       }
 }

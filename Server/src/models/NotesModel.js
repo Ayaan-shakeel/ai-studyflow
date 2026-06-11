@@ -18,6 +18,11 @@ const NotesSchema = new mongoose.Schema({
         ref: 'Subject',
         required: true,
     },
+    isAiGenerated:{
+        type:Boolean,
+        default:false
+
+    },
 
 },
     {

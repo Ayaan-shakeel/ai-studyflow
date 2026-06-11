@@ -109,6 +109,24 @@ export default function AIStudy({ user }) {
       setLoading(false);
     }
   };
+  const saveAiNote=async()=>{
+    try{
+      const res=await axios.post("http://localhost:5000/api/ai-study/save-ai-note",
+        {title:topic,content:generatedNote,subjectId:SelectedSubject},
+     {
+       withCredentials:true
+     } )
+      if(res.data.status===1){
+        toast.success("AI Note Saved Successfully")
+      }
+      else{
+        toast.error(res.data.message)
+      }
+    }
+    catch(error){ 
+      toast.error("Failed to save AI Note")
+    }
+  }
 
   // REVERSED TO MATCH YOUR APP LOGIC
   const pageClasses = darkMode
