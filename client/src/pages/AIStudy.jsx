@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState,useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import axios from 'axios';
 import { toast, Toaster } from 'react-hot-toast';
@@ -19,8 +19,24 @@ export default function AIStudy({ user }) {
   const [prompt, setPrompt] = useState("");
   const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
+  const [subjectId,setSubjectId]=useState("")
+  const [subjects,setSubjects]=useState([])
   const textareaRef = useRef(null);
   const { darkMode } = useTheme();
+  useEffect(()=>{
+const fetchSubjects=async()=>{
+  try{
+    const res=await axios.get("http://localhost:5000/api/subjects/get-subjects",
+      {withCredentials:true})
+      if(res.data.status===1){
+        setSubjects(res.data.subjects)
+      }
+  }catch(error){
+    console.log(error.message)
+  }
+}
+fetchSubjects()
+  },[])
 
   const handleChange = (e) => {
     setPrompt(e.target.value);
@@ -112,7 +128,7 @@ export default function AIStudy({ user }) {
   const saveAiNote=async()=>{
     try{
       const res=await axios.post("http://localhost:5000/api/ai-study/save-ai-note",
-        {title:topic,content:generatedNote,subjectId:SelectedSubject},
+        {title:prompt,content:response,subjectId:subjectId},
      {
        withCredentials:true
      } )
@@ -124,6 +140,7 @@ export default function AIStudy({ user }) {
       }
     }
     catch(error){ 
+      console.log(error.message)
       toast.error("Failed to save AI Note")
     }
   }
@@ -265,7 +282,13 @@ export default function AIStudy({ user }) {
                     <FileText className="w-4 h-4" />
                     Generate Notes
                   </button>
-
+<select value={subjectId} onChange={(e)=>setSubjectId(e.target.value)}>
+  <option value="">Select Subject</option>
+  {subjects.map((subject)=>{
+    return <option key={subject._id} value={subject._id}>{subject.name}</option>
+  })}
+</select>
+<button type="button" onClick={saveAiNote}>Save to Note</button>
                   <button
                     onClick={generateQuiz}
                     disabled={loading}
