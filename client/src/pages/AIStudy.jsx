@@ -21,6 +21,9 @@ export default function AIStudy({ user }) {
   const [loading, setLoading] = useState(false);
   const [subjectId,setSubjectId]=useState("")
   const [subjects,setSubjects]=useState([])
+  const [quiz,setQuiz]=useState([])
+  const [answers,setAnswers]=useState({})
+  const [score,setScore]=useState(0)
   const textareaRef = useRef(null);
   const { darkMode } = useTheme();
   useEffect(()=>{
@@ -91,6 +94,9 @@ fetchSubjects()
       if (res.data.status === 1) {
         setResponse(res.data.message);
         console.log(res.data.message);
+        toast.success("AI Generated Quiz Successfully")
+        setQuiz(res.data.quizData)
+       
       }
     } catch (error) {
       console.log(error);
@@ -144,7 +150,17 @@ fetchSubjects()
       toast.error("Failed to save AI Note")
     }
   }
+ 
+  const CalculateScore=()=>{
+    let score=0;
+    quiz.forEach((q,index)=>{
+      if(answers[index]===q.answer){
+        score++;
+      }
 
+    })
+    setScore(score)
+  }
   // REVERSED TO MATCH YOUR APP LOGIC
   const pageClasses = darkMode
     ? "min-h-screen bg-slate-50 text-slate-900"
@@ -297,6 +313,27 @@ fetchSubjects()
                     <ClipboardList className="w-4 h-4" />
                     Generate Quiz
                   </button>
+                  {quiz.map((q,index)=>(
+                    <div key={index}>
+                      <h2>
+                        
+                      {q.question}
+                      </h2>
+                      {q.options.map((option,i)=>(
+                        <button type="submit" key={i} onClick={()=>  setAnswers({
+                    ...answers,
+                    [index]:option
+                  })}>
+                          {option}
+                        </button>
+
+))}
+<button onClick={calculateScore}>Submit quiz</button>
+                    </div>
+                  ))}
+                
+
+                 
                 </div>
               </motion.section>
 

@@ -26,7 +26,26 @@ res.status(200).json({status:1,message:"I am Your AI Assistant.How can I Help yo
 
 export const generateQuiz=async(req,res)=>{
     try{
-        res.status(200).json({status:1,message:"This is AI Generated Quiz"})
+        const {prompt}=req.body;
+        if(!prompt){
+            return res.status(400).json({status:0,message:"Prompt field is required"})
+        }
+        const aiPrompt=`Generate 10 MCQ questions on ${prompt} Format :[{"question":"Questions Here","options":["A","B","C","D"],"answer":"Correct Answer"}] Do not inclue mark`
+        const result=await model.generateContent({
+            contents:[{
+                role:'user',
+                parts:[{text:aiPrompt}]
+            }],
+        });
+      const text = result.response.text();
+
+const cleanText = text
+  .replace(/```json/g, "")
+  .replace(/```/g, "")
+  .trim();
+
+const quizData = JSON.parse(cleanText);
+        res.status(200).json({status:1,message:"This is AI Generated Quiz","quizData":quizData})
     }
     catch(error){
         res.status(500).json({status:500,message:error.message})
