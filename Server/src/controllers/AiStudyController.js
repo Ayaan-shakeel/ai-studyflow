@@ -30,7 +30,7 @@ export const generateQuiz=async(req,res)=>{
         if(!prompt){
             return res.status(400).json({status:0,message:"Prompt field is required"})
         }
-        const aiPrompt=`Generate 10 MCQ questions on ${prompt} Format :[{"question":"Questions Here","options":["A","B","C","D"],"answer":"Correct Answer"}] Do not inclue mark`
+        const aiPrompt=`Generate 10 MCQ questions on ${prompt} Format :[{"question":"Questions Here","options":["A","B","C","D"],"answer":"Correct Answer"}] Do not include markdown , Do not include Explanations , Do not include \`\`\`json. `
         const result=await model.generateContent({
             contents:[{
                 role:'user',
