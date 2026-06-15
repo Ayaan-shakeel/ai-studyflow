@@ -28,6 +28,7 @@ export default function AIStudy({ user }) {
   const [quiz, setQuiz] = useState([]);
   const [answers, setAnswers] = useState({});
   const [score, setScore] = useState(0);
+  const [submitted, setSubmitted] = useState(false);
   const textareaRef = useRef(null);
   const { darkMode } = useTheme();
 
@@ -101,6 +102,9 @@ export default function AIStudy({ user }) {
         console.log(res.data.message);
         toast.success("AI Generated Quiz Successfully");
         setQuiz(res.data.quizData);
+        setAnswers({});
+        setScore(0);
+        setSubmitted(false);
       }
     } catch (error) {
       console.log(error);
@@ -156,14 +160,25 @@ export default function AIStudy({ user }) {
   };
 
   const calculateScore = () => {
-    let score = 0;
-    quiz.forEach((q, index) => {
-      const selectedAnswers = answers[index]?.charAt(0);
-      if (selectedAnswers === q.answer) {
-        score++;
-      }
-    });
-    setScore(score);
+    console.log("Quiz", quiz);
+    console.log("Answers", answers);
+    try {
+      let score = 0;
+      quiz.forEach((q, index) => {
+        if (answers[index] === q.answer) {
+          console.log(
+            `Q${index + 1}`,
+            answers[index] === q.answer
+          );
+          score++;
+        }
+      });
+      setScore(score);
+      setSubmitted(true);
+      console.log("Btn was clicked");
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   // Reciprocal app logic
@@ -397,11 +412,19 @@ export default function AIStudy({ user }) {
                                     onClick={() =>
                                       setAnswers({
                                         ...answers,
-                                        [index]: option.charAt(0)
+                                        [index]: option
                                       })
                                     }
                                     className={`rounded-2xl px-4 py-3 text-left font-medium transition-all duration-300 ${
-                                      answers[index] === option
+                                      submitted
+                                        ? option === q.answer
+                                          ? "bg-emerald-500 text-white"
+                                          : answers[index] === option
+                                          ? "bg-red-500 text-white"
+                                          : darkMode
+                                          ? "bg-slate-100 text-slate-800"
+                                          : "bg-white/10 text-slate-200"
+                                        : answers[index] === option
                                         ? "bg-cyan-500 text-slate-950"
                                         : darkMode
                                         ? "bg-slate-100 text-slate-800 hover:bg-slate-200"

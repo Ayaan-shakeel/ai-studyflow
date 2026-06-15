@@ -201,7 +201,7 @@ export default function Dashboard() {
                   </div>
 
                   <div className="flex flex-wrap items-center gap-3">
-                    <button
+                    {/* <button
                       onClick={() => setDarkMode(!darkMode)}
                       className={`inline-flex min-h-[44px] items-center justify-center gap-2 rounded-2xl px-4 py-3 font-medium transition-all duration-300 active:scale-[0.98] ${
                         darkMode
@@ -211,7 +211,7 @@ export default function Dashboard() {
                     >
                       {darkMode ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
                       <span className="text-sm">{darkMode ? "Dark" : "Light"} Mode</span>
-                    </button>
+                    </button> */}
 
                     <button
                       onClick={() => navigate("/tasks")}

@@ -16,13 +16,14 @@ import toast from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "./ThemeContext";
 import axios from "axios";
+import {useNavigate} from "react-router-dom"
 
 export default function Sidebar() {
   const [desktopOpen, setDesktopOpen] = useState(false);
   const [mobileMenu, setMobileMenu] = useState(false);
   const location = useLocation();
   const { darkMode } = useTheme();
-
+const navigate=useNavigate()
   const navLinks = [
     { name: "Dashboard", icon: <LayoutDashboard size={20} />, path: "/dashboard" },
     { name: "Notes", icon: <NotebookTabs size={20} />, path: "/notes" },
@@ -34,12 +35,15 @@ export default function Sidebar() {
 
   const handleLogout = async() => {
     try{
-const res=await axios.post("http://localhost:5000/api/auth/logout",{
+const res=await axios.post("http://localhost:5000/api/auth/logout",{},{
   withCredentials:true
+})
+if(res.data.status===1){
+console.log(res.data.message)
 }
-)
 
-    localStorage.removeItem("token");
+
+    // localStorage.removeItem("token");
     toast.success("Logged out successfully");
     navigate("/login")
 }

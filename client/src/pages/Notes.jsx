@@ -6,8 +6,8 @@ import { BookOpen, Search, NotebookPen, Trash2, Filter, FileText } from 'lucide-
 import { Toaster, toast } from 'react-hot-toast';
 import { motion } from 'framer-motion';
 import { useTheme } from '../components/ThemeContext';
-export default function Notes({ children }) {
-  const [user, setuser] = useState(null);
+export default function Notes({ children ,user }) {
+  // const [user, setuser] = useState(null);
   const [notes, setnotes] = useState([]);
   const [formData, setformData] = useState({
     title: "",

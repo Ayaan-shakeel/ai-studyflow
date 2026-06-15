@@ -9,6 +9,8 @@ export default function Navbar({ user }) {
   const { darkMode, setDarkMode } = useTheme();
 
   return (
+    <div>
+
     <nav
       className={`sticky top-0 z-40 w-full border-b backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-colors duration-300 ${
         darkMode
@@ -102,5 +104,6 @@ export default function Navbar({ user }) {
         </div>
       </div>
     </nav>
+        </div>
   );
 }
