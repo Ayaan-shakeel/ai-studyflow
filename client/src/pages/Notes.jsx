@@ -59,7 +59,7 @@ export default function Notes({ children ,user }) {
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/notes/get-notes", {
+        const response = await axios.get(  `${import.meta.env.VITE_API_URL}/api/notes/get-notes`, {
           withCredentials: true
         });
         if (response.data.status === 1) {
@@ -75,7 +75,7 @@ export default function Notes({ children ,user }) {
   useEffect(() => {
     const fetchSubjects = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/subjects/get-subjects", {
+        const res = await axios.get(  `${import.meta.env.VITE_API_URL}/api/subjects/get-subjects`, {
           withCredentials: true
         });
         if (res.data.status === 1) {
@@ -92,7 +92,7 @@ export default function Notes({ children ,user }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/api/notes/create-notes", formData, {
+      const res = await axios.post(  `${import.meta.env.VITE_API_URL}/api/notes/create-notes`, formData, {
         withCredentials: true
       });
       if (res.data.status === 1) {
@@ -108,7 +108,7 @@ export default function Notes({ children ,user }) {
 
   const deleteNote = async (id) => {
     try {
-      const res = await axios.delete(`http://localhost:5000/api/notes/delete-notes/${id}`, {
+      const res = await axios.delete(  `${import.meta.env.VITE_API_URL}/api/notes/delete-notes/${id}`, {
         withCredentials: true
       });
       if (res.data.status === 1) {
@@ -123,7 +123,7 @@ export default function Notes({ children ,user }) {
 
   const updateNote = async (id, title, content) => {
     try {
-      const res = await axios.put(`http://localhost:5000/api/notes/subjects/${id}`, { title, content }, {
+      const res = await axios.put(  `${import.meta.env.VITE_API_URL}/api/notes/subjects/${id}`, { title, content }, {
         withCredentials: true
       });
       if (res.data.status === 1) {

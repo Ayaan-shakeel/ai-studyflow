@@ -68,7 +68,7 @@ export default function Subjects({ user }) {
   useEffect(() => {
     const fetchSubjects = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/subjects/get-subjects", {
+        const res = await axios.get(  `${import.meta.env.VITE_API_URL}/api/subjects/get-subjects`, {
           withCredentials: true
         });
         if (res.data.status === 1) {
@@ -85,7 +85,7 @@ export default function Subjects({ user }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/api/subjects/create-subject", formData, {
+      const res = await axios.post(  `${import.meta.env.VITE_API_URL}/api/subjects/create-subject`, formData, {
         withCredentials: true
       });
       if (res.data.status === 1) {
@@ -101,7 +101,7 @@ export default function Subjects({ user }) {
 
   const deleteSubject = async (id) => {
     try {
-      const res = await axios.delete(`http://localhost:5000/api/subjects/delete-subject/${id}`, {
+      const res = await axios.delete(  `${import.meta.env.VITE_API_URL}/api/subjects/delete-subject/${id}`, {
         withCredentials: true
       });
       if (res.data.status === 1) {

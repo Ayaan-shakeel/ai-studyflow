@@ -24,7 +24,7 @@ export default function App() {
 useEffect(()=>{
   const fetchUser=async()=>{
     try{
-      const res=await axios.get('http://localhost:5000/api/auth/profile',{
+      const res=await axios.get(  `${import.meta.env.VITE_API_URL}/api/auth/profile`,{
         withCredentials:true
     })
   

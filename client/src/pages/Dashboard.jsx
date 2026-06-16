@@ -34,7 +34,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/auth/profile", {
+        const res = await axios.get(  `${import.meta.env.VITE_API_URL}/api/auth/profile`, {
           withCredentials: true
         });
         setuser(res.data.user);
@@ -57,7 +57,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/notes/get-notes", {
+        const res = await axios.get(  `${import.meta.env.VITE_API_URL}/api/notes/get-notes`, {
           withCredentials: true
         });
         if (res.data.notes) {
@@ -73,7 +73,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchSubjects = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/subjects/get-subjects", {
+        const res = await axios.get(  `${import.meta.env.VITE_API_URL}/api/subjects/get-subjects`, {
           withCredentials: true
         });
         if (res.data.subjects) {
@@ -89,7 +89,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/tasks/get-tasks", {
+        const res = await axios.get(  `${import.meta.env.VITE_API_URL}/api/tasks/get-tasks`, {
           withCredentials: true
         });
         if (res.data.tasks) {
@@ -332,7 +332,7 @@ export default function Dashboard() {
 
                 <motion.div variants={itemVariants} className="sm:col-span-2 xl:col-span-1">
                   <button
-                    onClick={() => navigate("/task", { state: { filter: "pending" } })}
+                    onClick={() => navigate("/tasks", { state: { filter: "pending" } })}
                     className={`w-full h-full text-left rounded-3xl p-5 sm:p-6 transition-all duration-300 hover:-translate-y-1 ${panelClasses}`}
                   >
                     <div className="flex items-start justify-between gap-4 mb-6">

@@ -33,7 +33,7 @@ export default function Task({ user }) {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/tasks/get-tasks", {
+        const res = await axios.get(  `${import.meta.env.VITE_API_URL}/api/tasks/get-tasks`, {
           withCredentials: true
         });
         if (res.data.status === 1) {
@@ -55,7 +55,7 @@ export default function Task({ user }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/api/tasks/create-task", formData, {
+      const res = await axios.post(  `${import.meta.env.VITE_API_URL}/api/tasks/create-task`, formData, {
         withCredentials: true
       });
       if (res.data.status === 1) {
@@ -72,7 +72,7 @@ export default function Task({ user }) {
   const toggleTask = async (id, currentStatus) => {
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/tasks/update-task/${id}`,
+          `${import.meta.env.VITE_API_URL}/api/tasks/update-task/${id}`,
         { isDone: !currentStatus },
         { withCredentials: true }
       );
@@ -86,7 +86,7 @@ export default function Task({ user }) {
 
   const deleteTask = async (id) => {
     try {
-      const res = await axios.delete(`http://localhost:5000/api/tasks/delete-task/${id}`, {
+      const res = await axios.delete(  `${import.meta.env.VITE_API_URL}/api/tasks/delete-task/${id}`, {
         withCredentials: true
       });
       if (res.data.status === 1) {

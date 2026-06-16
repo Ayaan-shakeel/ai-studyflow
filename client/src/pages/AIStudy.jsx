@@ -35,7 +35,7 @@ export default function AIStudy({ user }) {
   useEffect(() => {
     const fetchSubjects = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/subjects/get-subjects", {
+        const res = await axios.get(  `${import.meta.env.VITE_API_URL}/api/subjects/get-subjects`, {
           withCredentials: true
         });
         if (res.data.status === 1) {
@@ -66,7 +66,7 @@ export default function AIStudy({ user }) {
       setLoading(true);
 
       const res = await axios.post(
-        "http://localhost:5000/api/ai-study/generate-ai-notes",
+         `${import.meta.env.VITE_API_URL}/api/ai-study/generate-ai-notes`,
         { prompt },
         { withCredentials: true }
       );
@@ -74,6 +74,7 @@ export default function AIStudy({ user }) {
       if (res.data.status === 1) {
         setResponse(res.data.response);
         console.log(res.data.message);
+        toast.success("Note Generated Successfully");
       }
     } catch (error) {
       console.log(error);
@@ -92,7 +93,7 @@ export default function AIStudy({ user }) {
       setLoading(true);
 
       const res = await axios.post(
-        "http://localhost:5000/api/ai-study/generate-ai-quiz",
+        `${import.meta.env.VITE_API_URL}/api/ai-study/generate-ai-quiz`,
         { prompt },
         { withCredentials: true }
       );
@@ -100,7 +101,7 @@ export default function AIStudy({ user }) {
       if (res.data.status === 1) {
         setResponse(res.data.message);
         console.log(res.data.message);
-        toast.success("AI Generated Quiz Successfully");
+        toast.success(" Quiz Generated Successfully");
         setQuiz(res.data.quizData);
         setAnswers({});
         setScore(0);
@@ -123,7 +124,7 @@ export default function AIStudy({ user }) {
       setLoading(true);
 
       const res = await axios.post(
-        "http://localhost:5000/api/ai-study/send-ai-message",
+          `${import.meta.env.VITE_API_URL}/api/ai-study/send-ai-message`,
         { prompt },
         { withCredentials: true }
       );
@@ -134,7 +135,7 @@ export default function AIStudy({ user }) {
       }
     } catch (error) {
       console.log(error);
-      toast.error("Failed to send message");
+      toast.error("Error occured while receiving your message");
     } finally {
       setLoading(false);
     }
@@ -143,7 +144,7 @@ export default function AIStudy({ user }) {
   const saveAiNote = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/ai-study/save-ai-note",
+          `${import.meta.env.VITE_API_URL}/api/ai-study/save-ai-note`,
         { title: prompt, content: response, subjectId: subjectId },
         { withCredentials: true }
       );
@@ -175,9 +176,11 @@ export default function AIStudy({ user }) {
       });
       setScore(score);
       setSubmitted(true);
+      toast.success("Score calculated Successfully")
       console.log("Btn was clicked");
     } catch (error) {
       console.log(error.message);
+      toast.error("Error occured during calucating your score")
     }
   };
 
