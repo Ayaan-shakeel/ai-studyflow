@@ -80,7 +80,7 @@ export default function Notes({ children ,user }) {
         });
         if (res.data.status === 1) {
           setSubjects(res.data.subjects);
-          console.log(res.data.subjects);
+          // console.log(res.data.subjects);
         }
       } catch (error) {
         console.log(error);
@@ -128,7 +128,7 @@ export default function Notes({ children ,user }) {
       });
       if (res.data.status === 1) {
         setnotes(notes.map((note) => note._id === id ? { ...note, title, content } : note));
-        console.log(notes);
+        // console.log(notes);
       }
     } catch (error) {
       console.log(error);

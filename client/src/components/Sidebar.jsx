@@ -35,11 +35,11 @@ const navigate=useNavigate()
 
   const handleLogout = async() => {
     try{
-const res=await axios.post("http://localhost:5000/api/auth/logout",{},{
+const res=await axios.post(  `${import.meta.env.VITE_API_URL}/api/auth/logout`,{},{
   withCredentials:true
 })
 if(res.data.status===1){
-console.log(res.data.message)
+// console.log(res.data.message)
 }
 
 

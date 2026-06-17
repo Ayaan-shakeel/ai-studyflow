@@ -30,7 +30,7 @@ export default function Signup() {
       });
       toast.success("SignUp Successful");
       window.location.href = "/dashboard";
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
       toast.error("SignUp Failed");
       console.log(error.message);

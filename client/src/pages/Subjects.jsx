@@ -107,7 +107,7 @@ export default function Subjects({ user }) {
       if (res.data.status === 1) {
         toast.success("Subject Deleted Successfully");
         setsubject(subject.filter(subject => subject._id !== id));
-        console.log(subject.filter(subject => subject._id !== id));
+        // console.log(subject.filter(subject => subject._id !== id));
       }
     } catch (error) {
       toast.error("Subject Delete Failed");

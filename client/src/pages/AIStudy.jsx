@@ -73,7 +73,7 @@ export default function AIStudy({ user }) {
 
       if (res.data.status === 1) {
         setResponse(res.data.response);
-        console.log(res.data.message);
+        // console.log(res.data.message);
         toast.success("Note Generated Successfully");
       }
     } catch (error) {
@@ -100,7 +100,7 @@ export default function AIStudy({ user }) {
 
       if (res.data.status === 1) {
         setResponse(res.data.message);
-        console.log(res.data.message);
+        // console.log(res.data.message);
         toast.success(" Quiz Generated Successfully");
         setQuiz(res.data.quizData);
         setAnswers({});
@@ -131,7 +131,7 @@ export default function AIStudy({ user }) {
 
       if (res.data.status === 1) {
         setResponse(res.data.response);
-        console.log(res.data.message);
+        // console.log(res.data.message);
       }
     } catch (error) {
       console.log(error);
@@ -161,23 +161,23 @@ export default function AIStudy({ user }) {
   };
 
   const calculateScore = () => {
-    console.log("Quiz", quiz);
-    console.log("Answers", answers);
+    // console.log("Quiz", quiz);
+    // console.log("Answers", answers);
     try {
       let score = 0;
       quiz.forEach((q, index) => {
         if (answers[index] === q.answer) {
-          console.log(
-            `Q${index + 1}`,
-            answers[index] === q.answer
-          );
+          // console.log(
+          //   `Q${index + 1}`,
+          //   answers[index] === q.answer
+          // );
           score++;
         }
       });
       setScore(score);
       setSubmitted(true);
       toast.success("Score calculated Successfully")
-      console.log("Btn was clicked");
+      // console.log("Btn was clicked");
     } catch (error) {
       console.log(error.message);
       toast.error("Error occured during calucating your score")

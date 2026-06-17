@@ -29,7 +29,7 @@ export default function Login() {
       });
       toast.success("Login Successful");
       window.location.href = "/dashboard";
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
       toast.error("Login Failed");
       console.log(error.message);

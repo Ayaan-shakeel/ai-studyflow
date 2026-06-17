@@ -38,7 +38,7 @@ export default function Dashboard() {
           withCredentials: true
         });
         setuser(res.data.user);
-        console.log(res.data.user);
+        // console.log(res.data.user);
       } catch (error) {
         console.log(error.message);
         navigate("/login");
