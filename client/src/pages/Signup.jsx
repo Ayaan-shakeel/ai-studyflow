@@ -25,6 +25,19 @@ export default function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      if(!formData.username || !formData.email || !formData.password){
+        toast.error("Please fill all the fields");
+        return;
+      }
+      if(formData.password.length < 8){
+        toast.error("Password must be at least 8 characters");
+        return;
+      }
+      if(!formData.email.includes("@")){
+        toast.error("Invalid email");
+        return;
+      }
+      
       const response = await axios.post(  `${import.meta.env.VITE_API_URL}/api/auth/register`, formData, {
         withCredentials: true
       });

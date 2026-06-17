@@ -24,6 +24,10 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      if(!formData.email && !formData.password){
+              toast.error("Please fill all the fields");
+              return;
+            }
       const response = await axios.post(  `${import.meta.env.VITE_API_URL}/api/auth/login`, formData, {
         withCredentials: true
       });
