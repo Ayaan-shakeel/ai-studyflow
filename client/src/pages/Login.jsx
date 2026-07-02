@@ -46,14 +46,14 @@ export default function Login() {
 
       <AuthCard>
         <div>
-          <h1 className="text-2xl text-center font-bold mb-2">Welcome Back</h1>
+          <h1 className="text-2xl text-center text-slate-700 font-bold mb-2">Welcome Back</h1>
           <h3 className="text-base text-center font-semibold mb-6 text-slate-600">
             Login
           </h3>
 
           <form className="flex flex-col items-center justify-center gap-4" onSubmit={handleSubmit}>
             <input
-              className="border border-slate-300 w-full p-3 rounded-xl outline-none focus:ring-2 focus:ring-blue-200"
+              className="border border-slate-300 w-full p-3 rounded-xl text-slate-600 outline-none focus:ring-2 focus:ring-blue-200"
               type="email"
               name="email"
               id="email"
@@ -64,7 +64,7 @@ export default function Login() {
 
             <div className="relative w-full">
               <input
-                className="border border-slate-300 w-full p-3 pr-12 rounded-xl outline-none focus:ring-2 focus:ring-blue-200"
+                className="border border-slate-300 w-full p-3 text-slate-600 pr-12 rounded-xl outline-none focus:ring-2 focus:ring-blue-200"
                 type={show ? "text" : "password"}
                 name="password"
                 id="password"

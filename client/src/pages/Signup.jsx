@@ -56,14 +56,14 @@ export default function Signup() {
 
       <AuthCard>
         <div>
-          <h1 className="text-2xl font-bold text-center mb-2">Welcome to our app</h1>
+          <h1 className="text-2xl font-bold text-center text-slate-700 mb-2">Welcome to our app</h1>
           <h2 className="text-base font-semibold text-center mb-6 text-slate-600">
             Please Sign Up
           </h2>
 
           <form className="flex items-center flex-col justify-center gap-4" onSubmit={handleSubmit}>
             <input
-              className="border border-slate-300 w-full p-3 rounded-xl outline-none focus:ring-2 focus:ring-blue-200"
+              className="border border-slate-300 w-full p-3 text-slate-600 rounded-xl outline-none focus:ring-2 focus:ring-blue-200"
               type="text"
               name="username"
               id="username"
@@ -73,7 +73,7 @@ export default function Signup() {
             />
 
             <input
-              className="border border-slate-300 w-full p-3 rounded-xl outline-none focus:ring-2 focus:ring-blue-200"
+              className="border border-slate-300 w-full text-slate-600 p-3 rounded-xl outline-none focus:ring-2 focus:ring-blue-200"
               type="email"
               name="email"
               id="email"
@@ -84,7 +84,7 @@ export default function Signup() {
 
             <div className="relative w-full">
               <input
-                className="border border-slate-300 w-full p-3 pr-12 rounded-xl outline-none focus:ring-2 focus:ring-blue-200"
+                className="border border-slate-300 w-full text-slate-600 p-3 pr-12 rounded-xl outline-none focus:ring-2 focus:ring-blue-200"
                 type={show ? "text" : "password"}
                 name="password"
                 id="password"
